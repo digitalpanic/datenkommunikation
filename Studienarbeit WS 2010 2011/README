@@ -12,7 +12,6 @@ src/test/java: Hier werden alle .java-Dateien zum Testen der Applikation und des
 src/main/resources: Hier werden alle nicht .java-Dateien zum Testen der Applikation abgelegt.
 
 
-sdf
 
 Übersicht Java-Packages:
 
