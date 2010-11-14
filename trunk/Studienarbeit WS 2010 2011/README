@@ -1,7 +1,7 @@
 In diesem Paket befinden sich die Sourcen zur Studienarbeit "Datenkommunikation"
-Entpacken Sie das Archiv in einen Ordner und wÃ¤hlen Sie unter Eclipse: 
+Entpacken Sie das Archiv in einen Ordner und wählen Sie unter Eclipse: 
 Import.. -> Existing projects into workspace
-und wÃ¤hlen Sie dann das Verzeichnis aus.
+und wählen Sie dann das Verzeichnis aus.
 
 
 Beschreibung der einzelnen Ordner:
@@ -13,30 +13,30 @@ src/main/resources: Hier werden alle nicht .java-Dateien zum Testen der Applikat
 
 
 
-Ãœbersicht Java-Packages:
+Übersicht Java-Packages:
 
 edu.hm.dako.chat: 
-EnthÃ¤lt die Businesslogik des Chatprogramms. 
+Enthält die Businesslogik des Chatprogramms. 
 Der Server wird durch die Klasse ServerCommunicator gestartet.
 Der Client wird mit der Klasse Client gestartet.
 Dieser Teil ist schon implementiert und kann ggf. erweitert werden.
 
 edu.hm.dako.chatsession:
-EnthÃ¤lt die Interfaces und RÃ¼mpfe der Implementierung der ChatSession-Schicht.
+EnthÃ¤lt die Interfaces und Rümpfe der Implementierung der ChatSession-Schicht.
 
 edu.hm.dako.lwtrt:
-EnthÃ¤lt die Interfaces und RÃ¼mpfe der Implementierung der LWTRT-Schicht.
+Enthält die Interfaces und Rümpfe der Implementierung der LWTRT-Schicht.
 
 edu.hm.dako.udp.wrapper:
-EnthÃ¤lt den Zugriff zur UDP Schicht. 
-Mit der Klasse UdpSocketwrapper kÃ¶nnen Daten Ã¼ber UDP versendet werden.
+Enthält den Zugriff zur UDP Schicht. 
+Mit der Klasse UdpSocketwrapper können Daten über UDP versendet werden.
 Siehe hierzu das Beispiel UdpSocketWrapperTest
 
 
 Unter src/test/java findet sich:
 
 edu.hm.dako.test:
-Hier befinden sich bereits ausfÃ¼hrbare Tests.
+Hier befinden sich bereits ausführbare Tests.
 
 edu.hm.dako.test.mocks:
 Hier ist der LWTRTServiceMock, der einen LWTRTService auf Basis von TCP bereit stellt.

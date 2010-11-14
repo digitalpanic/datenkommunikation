@@ -7,7 +7,7 @@ import edu.hm.dako.lwtrt.ex.LWTRTException;
 /**
  * The Implementation of LWTRTService.
  * 
- * @author Hochschule MÃ¼nchen
+ * @author Hochschule München
  * @version 1.0.0
  */
 public class LWTRTServiceImpl implements LWTRTService {
