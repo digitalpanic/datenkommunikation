@@ -76,19 +76,18 @@ public class UDPEchoServer {
  /** 
    *  Main method
    */  
-  public static void main (String args[]) throws IOException 
-  {
-    if (args.length != 1) {
-      throw new RuntimeException ("Syntax: UDPEchoServer <port>");
-    }    
-    /* 
-     * Create an instance of an UDPEchoServer
-     */  
-    UDPEchoServer echo = new UDPEchoServer (Integer.parseInt (args[0]));
-    System.out.println("UDPEchoServer startet...");
-    /*
-     * Execute the server
-     */
-    echo.execute ();
+	public static void main(String args[]) throws IOException {
+		if (args.length != 1) {
+			throw new RuntimeException("Syntax: UDPEchoServer <port>");
+		}
+		/*
+		 * Create an instance of an UDPEchoServer
+		 */
+		UDPEchoServer echo = new UDPEchoServer(Integer.parseInt(args[0]));
+		System.out.println("UDPEchoServer startet...");
+		/*
+		 * Execute the server
+		 */
+		echo.execute();
   } 
 }
