@@ -1,0 +1,14 @@
+edu.hm.dako.chat
+edu.hm.dako.chat.impl
+edu.hm.dako.chatsession
+edu.hm.dako.chatsession.ex
+edu.hm.dako.chatsession.impl
+edu.hm.dako.chatsession.listener
+edu.hm.dako.chatsession.pdu
+edu.hm.dako.lwtrt
+edu.hm.dako.lwtrt.ex
+edu.hm.dako.lwtrt.impl
+edu.hm.dako.lwtrt.pdu
+edu.hm.dako.test
+edu.hm.dako.test.mocks
+edu.hm.dako.udp.wrapper
