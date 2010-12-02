@@ -1,4 +1,5 @@
 package edu.hm.dako.lwtrt.impl;
+
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.logging.Log;
@@ -27,38 +28,51 @@ public class LWTRTServiceImpl implements LWTRTService {
 	int port;
 
 	/**
-	 * Registrieren einer Anwendung und Listenport aktivieren
-	 * <p>
-	 * Nach der Registrierung ist der lokale Port für den Dienstnehmer gebunden.
-	 * Ab dem Zeitpunkt der Registrierung werden eingehende Verbindungswünsche
-	 * entgegen genommen. Akzeptiert der Dienstnehmer die Verbindungswünsche
-	 * nicht rechtzeitig, wird der Verbindungsaufbau abgebrochen. Nach der
-	 * Registrierung kann der Dienstnehmer beginnen aktiv eine Verbindung
-	 * aufzubauen.
-	 * <p>
-	 * Ein Port kann nur einmal (auch durch andere Prozesse) registriert werden.
+	 * Registrieren einer Anwendung und Port aktivieren
 	 * 
 	 * @param localPort
-	 *            Pornumber
+	 *            Portnumber
 	 * @throws LWTRTException
-	 *             Fehler falls Portregestrierung nicht erflogleich war.
-	 * 
 	 */
-	public void register(int localPort) throws LWTRTException {
+	public void register(int port) throws LWTRTException {
 		try {
-			UdpSocketWrapper udpSocketW = new UdpSocketWrapper(localPort);
-			socketmap.put(localPort, udpSocketW);
+			UdpSocketWrapper udpsw = new UdpSocketWrapper(port);
+			socketmap.put(port, udpsw);
+			// TODO Wird der Port korrekt in die LogFiles geschrien?
 			log.debug("INFO: Register LWTRTPort. Portnumber:"
 					+ LWTRTServiceImpl.socketmap.get(port));
 		} catch (Exception ex) {
 			log.error("ERROR: Fehler bei Regestrierung der Ports:" + ex);
+			ex.printStackTrace();
 		}
-
 	}
 
-	@Override
+	/**
+	 * De-Regestriert den Port, entfernt diesen aus das Hashmap und schliesst
+	 * den Wrapper.
+	 * 
+	 * 
+	 * @param port
+	 *            Port, welcher De-Regestriert und aus der Hashmap entfernt
+	 *            werden soll.
+	 * @throws LWTRTException
+	 */
 	public void unregister() throws LWTRTException {
-		// TODO Auto-generated method stub
+		UdpSocketWrapper udpswu;
+
+		//TODO Prüfen, ob Logfiles korrekt geschrieben werden
+		try {
+			udpswu = LWTRTServiceImpl.socketmap.get((Integer) port);
+			log.debug("DEBUG: Port " + port + " wurde aus Socketmap geholt");
+			socketmap.remove((Integer) port);
+			log.debug("DEBUG: Port " + port + " wurde aus Socketmap entfernt.");
+			udpswu.close();
+			log.debug("DEBUG: SocketWrapper wurde geschlossen.");
+		} catch (Exception ex) {
+			log.error("ERROR: Fehler bei De-Regestrierung der Ports:" + port
+					+ " " + ex);
+			ex.printStackTrace();
+		}
 
 	}
 

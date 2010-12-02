@@ -3,7 +3,7 @@ Entpacken Sie das Archiv in einen Ordner und wählen Sie unter Eclipse:
 Import.. -> Existing projects into workspace
 und wählen Sie dann das Verzeichnis aus.
 
-
+<
 Beschreibung der einzelnen Ordner:
 
 src/main/java: Hier werden alle .java-Dateien der Applikation abgelegt.
