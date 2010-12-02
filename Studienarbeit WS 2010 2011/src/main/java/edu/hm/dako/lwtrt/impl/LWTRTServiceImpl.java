@@ -26,6 +26,9 @@ public class LWTRTServiceImpl implements LWTRTService {
 
 	// variable for portnummer
 	int port;
+	
+	
+	
 
 	/**
 	 * Registrieren einer Anwendung und Port aktivieren
@@ -82,6 +85,7 @@ public class LWTRTServiceImpl implements LWTRTService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 	@Override
 	public LWTRTConnection accept() throws LWTRTException {
