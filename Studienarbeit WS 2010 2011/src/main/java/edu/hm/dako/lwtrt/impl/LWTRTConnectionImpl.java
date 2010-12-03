@@ -14,7 +14,7 @@ import edu.hm.dako.udp.wrapper.UdpSocketWrapper;
 /**
  * The Class ConnectionImpl.
  * 
- * @author Hochschule MÃ¼nchen
+ * @author Hochschule München
  * @version 1.0.0
  */
 public class LWTRTConnectionImpl implements LWTRTConnection {
