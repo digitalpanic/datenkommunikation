@@ -56,10 +56,10 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 				}
 			}
 		} catch (IOException ex) {
-			log.error("ERROR: Fehler bei Disconnect " + ex);
+			log.error("Fehler bei Disconnect " + ex);
 			ex.printStackTrace();
 		} catch (InterruptedException ex) {
-			log.error("ERROR: Disconnect Thread wurde unterborchen. " + ex);
+			log.error("Disconnect Thread wurde unterborchen. " + ex);
 			ex.printStackTrace();
 		}
 		setSeqNr();
@@ -77,10 +77,10 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 			udpw.send(pdu);
 		} catch (SocketException ex) {
 			ex.printStackTrace();
-			log.error("ERROR: Socketerror: " + ex);
+			log.error("Socketerror: " + ex);
 		} catch (IOException ex) {
 			ex.printStackTrace();
-			log.error("ERROR: IO Exceptoion: " + ex);
+			log.error("IO Exceptoion: " + ex);
 		}
 	}
 
@@ -111,10 +111,10 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 			udpw.send(pdu);
 		} catch (SocketException ex) {
 			ex.printStackTrace();
-			log.error("ERROR: Socketerror: " + ex);
+			log.error("Socketerror: " + ex);
 		} catch (IOException ex) {
 			ex.printStackTrace();
-			log.error("ERROR: IO Exceptoion: " + ex);
+			log.error("IO Exceptoion: " + ex);
 		}
 		timer.stop();
 	}
@@ -130,10 +130,10 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 			udpw.send(pdu);
 		} catch (SocketException ex) {
 			ex.printStackTrace();
-			log.error("ERROR: Socketerror: " + ex);
+			log.error("Socketerror: " + ex);
 		} catch (IOException ex) {
 			ex.printStackTrace();
-			log.error("ERROR: IO Exceptoion: " + ex);
+			log.error("IO Exceptoion: " + ex);
 		}
 	}
 

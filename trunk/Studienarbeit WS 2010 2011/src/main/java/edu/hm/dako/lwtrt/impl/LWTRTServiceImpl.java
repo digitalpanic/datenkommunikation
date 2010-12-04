@@ -42,10 +42,10 @@ public class LWTRTServiceImpl implements LWTRTService {
 			UdpSocketWrapper udpsw = new UdpSocketWrapper(port);
 			socketmap.put(port, udpsw);
 			// TODO Wird der Port korrekt in die LogFiles geschrien?
-			log.debug("INFO: Register LWTRTPort. Portnumber:"
+			log.debug("Register LWTRTPort. Portnumber:"
 					+ LWTRTServiceImpl.socketmap.get(port));
 		} catch (Exception ex) {
-			log.error("ERROR: Fehler bei Regestrierung der Ports:" + ex);
+			log.error("Fehler bei Regestrierung der Ports:" + ex);
 			ex.printStackTrace();
 		}
 	}
@@ -66,13 +66,13 @@ public class LWTRTServiceImpl implements LWTRTService {
 		//TODO Prüfen, ob Logfiles korrekt geschrieben werden
 		try {
 			udpswu = LWTRTServiceImpl.socketmap.get((Integer) port);
-			log.debug("DEBUG: Port " + port + " wurde aus Socketmap geholt");
+			log.debug("Port " + port + " wurde aus Socketmap geholt");
 			socketmap.remove((Integer) port);
-			log.debug("DEBUG: Port " + port + " wurde aus Socketmap entfernt.");
+			log.debug("Port " + port + " wurde aus Socketmap entfernt.");
 			udpswu.close();
-			log.debug("DEBUG: SocketWrapper wurde geschlossen.");
+			log.debug("SocketWrapper wurde geschlossen.");
 		} catch (Exception ex) {
-			log.error("ERROR: Fehler bei De-Regestrierung der Ports:" + port
+			log.error("Fehler bei De-Regestrierung der Ports:" + port
 					+ " " + ex);
 			ex.printStackTrace();
 		}
