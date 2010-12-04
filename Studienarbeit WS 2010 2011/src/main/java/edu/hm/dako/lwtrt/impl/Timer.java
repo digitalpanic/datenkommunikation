@@ -31,7 +31,7 @@ public class Timer {
 	public void start(String task) {
 		this.task = task;
 		time = System.nanoTime();
-		log.info("INFO: Timer für den Task " + task + " ist mit " + time
+		log.info("Timer für den Task " + task + " ist mit " + time
 				+ " gestartet");
 	}
 
@@ -41,7 +41,7 @@ public class Timer {
 	 */
 	public void stop() {
 		time = System.nanoTime() - time;
-		log.info("INFO: Timer für den Task " + task + " hat nach " + time
+		log.info("Timer für den Task " + task + " hat nach " + time
 				+ " gestoppt");
 	}
 
