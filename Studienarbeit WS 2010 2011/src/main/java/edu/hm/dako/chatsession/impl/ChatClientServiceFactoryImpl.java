@@ -12,7 +12,9 @@ public class ChatClientServiceFactoryImpl implements ChatClientServiceFactory {
 
 	@Override
 	public ChatClientService register(int port) throws ChatServiceException {
-		return null;
+		ChatClientServiceImpl client = new ChatClientServiceImpl();
+		client.setListenport(port);
+		return client;
 	}
 
 }

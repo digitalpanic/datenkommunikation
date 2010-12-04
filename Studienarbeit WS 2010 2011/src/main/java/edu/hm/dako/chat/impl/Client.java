@@ -112,9 +112,9 @@ public class Client implements ChatEventListener {
 
     public Client() {
         PropertyConfigurator.configureAndWatch("log4j.properties", 60 * 1000);
-
-        communicator = new ClientCommunicator(this);
         showLoginFrame();
+        communicator = new ClientCommunicator(this);
+        
     }
 
     public static void main(String[] args) {

@@ -50,6 +50,6 @@ public class ChatServerServiceImpl extends BaseServiceImpl implements
 
 	@Override
 	public String getUserName() {
-		return null;
+		return super.getUsername();
 	}
 }

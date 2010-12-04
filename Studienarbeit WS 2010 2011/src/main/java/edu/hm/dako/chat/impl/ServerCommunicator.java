@@ -1,9 +1,14 @@
+
 package edu.hm.dako.chat.impl;
 
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+
+import javax.swing.JTextField;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -21,6 +26,9 @@ import edu.hm.dako.chatsession.pdu.ChatUserList;
 public class ServerCommunicator extends Thread implements ChatServerListener {
 	private static Log log = LogFactory.getLog(ServerCommunicator.class);
 
+	JTextField ausgehend;
+	PrintWriter writer;
+	
 	private static ChatServerServiceFactory factory;
 	private static ConcurrentHashMap<String, ChatServerService> sessions = new ConcurrentHashMap<String, ChatServerService>();
 	private ChatServerService chatServerService;
@@ -96,10 +104,11 @@ public class ServerCommunicator extends Thread implements ChatServerListener {
 	}
 
 	@Override
-	public void onActionEvent(ChatAction action) {
-		// TODO bisher noch keine Actions definiert
-
+	public void onActionEvent (ChatAction action){
+		
 	}
+		
+	
 
 	public void onLogin(String username) {
 		if (!sessions.containsKey(username)) {
