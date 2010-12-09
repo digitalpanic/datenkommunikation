@@ -109,6 +109,7 @@ public class LWTRTPdu implements Serializable {
 	}
 
 	/**
+	 * @return 
 	 * @return the userData
 	 */
 	public Object getUserData() {
@@ -129,5 +130,6 @@ public class LWTRTPdu implements Serializable {
 		this.remotePort = lwtrtPdu.getRemotePort();
 		this.sequenceNumber = lwtrtPdu.getSequenceNumber();
 		this.userData = lwtrtPdu.getUserData();
+		
 	}
 }
