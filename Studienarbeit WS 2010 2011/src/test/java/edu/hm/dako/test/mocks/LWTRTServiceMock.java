@@ -45,7 +45,7 @@ public class LWTRTServiceMock implements LWTRTService {
 
 	}
 
-	public LWTRTConnection accept() throws LWTRTException {
+	public LWTRTConnection accept(int port) throws LWTRTException {
 		try {
 			log.debug("Accept on " + port);
 			ServerSocket serverSocket = socketmap.get(port);

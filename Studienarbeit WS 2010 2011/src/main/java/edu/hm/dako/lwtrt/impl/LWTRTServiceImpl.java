@@ -184,7 +184,7 @@ public class LWTRTServiceImpl implements LWTRTService {
 	 * @throws LWTRTException
 	 * @author Florian Leicher
 	 */
-	public LWTRTConnection accept() throws LWTRTException {
+	public LWTRTConnection accept(int port) throws LWTRTException {
 		LWTRTPdu receivePDU = new LWTRTPdu();
 		UdpSocketWrapper receiver = LWTRTServiceImpl.socketmap
 				.get((Integer) port);
