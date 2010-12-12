@@ -1,5 +1,6 @@
 package edu.hm.dako.lwtrt.impl;
 
+//Imports
 import java.io.IOException;
 import java.net.*;
 import java.util.Vector;
@@ -26,20 +27,18 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 	private String remAdr;
 	private String adress;
 
-	private int seqnr;
+	private int seqNr;
 	private int remPort;
 	private int port;
-
-	private long sequenceNumber;
 
 	private Object userData;
 	private UdpSocketWrapper udpw;
 
-	private boolean disconnectSuccess;
-	private boolean sendingSuccess;
+	private boolean discSuc;
+	private boolean sendSuc;
 
-	volatile Vector<LWTRTPdu> pingBuffer = new Vector<LWTRTPdu>();
-	private volatile Vector<LWTRTPdu> pickupBuffer = new Vector<LWTRTPdu>();
+	volatile Vector<LWTRTPdu> pngBuff = new Vector<LWTRTPdu>();
+	private volatile Vector<LWTRTPdu> pickUpBuff = new Vector<LWTRTPdu>();
 
 	private Timer timer;
 	private RecThread rThread;
@@ -50,33 +49,39 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 		this.setAdress(adress2);
 		this.remAdr = remAdress2;
 		this.remPort = remPort2;
-		this.sendingSuccess = false;
+		this.sendSuc = false;
 
 		udpw = LWTRTServiceImpl.socketmap.get((Integer) port);
 
 		rThread = new RecThread(this);
 		rThread.start();
-		this.sequenceNumber = 1;
+		this.seqNr = 1;
 	}
 
-	@Override
-	// TODO Kommentare
+	/**
+	 * Abbau der Verbindung
+	 * 
+	 * @author Florian Leicher
+	 * @throws LWTRTException
+	 * 
+	 */
 	public void disconnect() throws LWTRTException {
+
 		timer.start("disconnect");
+
 		LWTRTPdu pdu = new LWTRTPdu();
 		pdu.setRemoteAddress(remAdr);
 		pdu.setRemotePort(remPort);
 		pdu.setOpId(LWTRTPdu.OPID_DISCONNECT_REQ);
 
-		// Senden und Prüfen, ob Response eingetroffen
 		try {
 			for (int i = 0; i < 3; i++) {
 				udpw.send(pdu);
 				for (int y = 0; y < 10; y++) {
-					if (this.disconnectSuccess == true) {
+					if (this.discSuc == true) {
 						y = 10;
 						i = 3;
-						this.disconnectSuccess = false;
+						this.discSuc = false;
 					}
 					Thread.sleep(1000);
 				}
@@ -88,17 +93,24 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 			log.error("Disconnect Thread wurde unterborchen. " + ex);
 			ex.printStackTrace();
 		}
+
 		setSeqNr();
 		timer.stop();
+
 	}
 
-	@Override
-	// TODO Kommentare
+	/**
+	 * Akzeptieren des Verbindungsabbau.
+	 * 
+	 * @author Florian Leicher
+	 */
 	public void acceptDisconnection() throws LWTRTException {
+
 		LWTRTPdu pdu = new LWTRTPdu();
 		pdu.setRemoteAddress(remAdr);
 		pdu.setRemotePort(remPort);
 		pdu.setOpId(LWTRTPdu.OPID_DISCONNECT_RSP);
+
 		try {
 			udpw.send(pdu);
 		} catch (SocketException ex) {
@@ -110,32 +122,34 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 		}
 	}
 
-	@Override
 	/**
-	 * 
+	 * Sendeversuch mit evtl. Wiederholung
 	 * 
 	 * @author Florian Leicher
 	 */
 	public void send(Object pdu) throws LWTRTException {
 		timer.start("send");
+
 		LWTRTPdu pdu1 = new LWTRTPdu();
 		pdu1.setRemoteAddress(remAdr);
 		pdu1.setRemotePort(remPort);
 		pdu1.setOpId(LWTRTPdu.OPID_DATA_REQ);
 		pdu1.setUserData(userData);
-		pdu1.setSequenceNumber(sequenceNumber);
+		pdu1.setSequenceNumber(seqNr);
+
 		try {
 			for (int i = 0; i < 3; i++) {
 				udpw.send(pdu1);
 				for (int y = 0; y < 10; y++) {
-					if (this.sendingSuccess == true) {
+					if (this.sendSuc == true) {
 						y = 10;
 						i = 3;
-						this.sendingSuccess = false;
+						this.sendSuc = false;
 					}
 					Thread.sleep(1000);
 				}
 			}
+
 		} catch (IOException eio) {
 			eio.printStackTrace();
 			log.error(eio);
@@ -143,39 +157,52 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 			eie.printStackTrace();
 			log.error(eie);
 		}
+
 		setSeqNr();
 		timer.stop();
+
 	}
 
-	@Override
-	// TODO Kommentare
+	/**
+	 * Empfang und sortieren der Daten vom Sender.
+	 * 
+	 * @author Florian Leicher
+	 * @throws LWTRTException
+	 */
 	public Object receive() throws LWTRTException {
+
 		while (true) {
-			if (!this.pingBuffer.isEmpty()) {
-				LWTRTPdu lwtrtPdu = this.pingBuffer.firstElement();
-				this.pingBuffer.remove(lwtrtPdu);
+
+			if (!this.pngBuff.isEmpty()) {
+				LWTRTPdu lwtrtPdu = this.pngBuff.firstElement();
+				this.pngBuff.remove(lwtrtPdu);
 				return lwtrtPdu.getUserData();
 			}
 			try {
 				Thread.sleep(100);
-
 			} catch (InterruptedException iex) {
 				iex.printStackTrace();
 				log.error("Empfangsfehler: " + iex);
 			}
-
 		}
 	}
 
-	@Override
-	// TODO Kommentare
+	/**
+	 * Anfrage zur Lebendüberwachung
+	 * 
+	 * @throws LWTRTException
+	 * @author Florian Leicher
+	 */
 	public void ping() throws LWTRTException {
+
 		timer.start("ping");
+
 		LWTRTPdu pdu = new LWTRTPdu();
 		pdu.setRemoteAddress(remAdr);
 		pdu.setOpId(LWTRTPdu.OPID_PING_REQ);
 		pdu.setRemotePort(remPort);
-		pdu.setSequenceNumber(seqnr);
+		pdu.setSequenceNumber(seqNr);
+
 		setSeqNr();
 
 		try {
@@ -187,16 +214,24 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 			ex.printStackTrace();
 			log.error("IO Exceptoion: " + ex);
 		}
+
 		timer.stop();
 	}
 
-	// TODO Kommentare
+	/**
+	 * Antwort zur Lebendüberwachung
+	 * 
+	 * @author Florian Leicher
+	 * @throws LWTRTException
+	 */
 	public void pingRSP() throws LWTRTException {
+
 		LWTRTPdu pdu = new LWTRTPdu();
 		pdu.setRemoteAddress(this.remAdr);
 		pdu.setRemotePort(this.remPort);
 		pdu.setOpId(LWTRTPdu.OPID_PING_RSP);
-		pdu.setSequenceNumber(seqnr);
+		pdu.setSequenceNumber(seqNr);
+
 		try {
 			udpw.send(pdu);
 		} catch (SocketException ex) {
@@ -206,6 +241,7 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 			ex.printStackTrace();
 			log.error("IO Exceptoion: " + ex);
 		}
+
 	}
 
 	/**
@@ -214,127 +250,139 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 	 * @author Florian Leicher
 	 */
 	private void setSeqNr() {
-		if (this.seqnr == 1) {
-			this.seqnr = 0;
-		} else if (this.seqnr == 0) {
-			this.seqnr = 1;
+		if (this.seqNr == 1) {
+			this.seqNr = 0;
+		} else if (this.seqNr == 0) {
+			this.seqNr = 1;
 		}
 	}
 
-	public void setAdress(String adress) {
-		this.adress = adress;
-	}
-
-	public String getAdress() {
-		return adress;
-	}
-
 	/**
-	 * Thread for Reveiving
-	 * 
+	 * Thread für den Empfang.
 	 * 
 	 * @author Florian
-	 * 
 	 */
 	private static class RecThread extends Thread {
+
 		public static Logger log = Logger.getLogger(RecThread.class);
-		private LWTRTConnectionImpl connection;
+		private LWTRTConnectionImpl con;
 
 		private RecThread(LWTRTConnectionImpl connection) {
-			this.connection = connection;
+			this.con = connection;
 		}
 
 		@SuppressWarnings("deprecation")
 		public void run() {
-			log.debug("Thread wurde gestartet");
-			synchronized (connection) {
-				if (!connection.pingBuffer.isEmpty()) {
-					LWTRTPdu pdu = connection.pingBuffer.firstElement();
-					log.debug("Erstes Bufferelement" + pdu.getOpId());
+			log.info("Thread wurde gestartet");
+			synchronized (con) {
 
+				if (!con.pngBuff.isEmpty()) {
+					LWTRTPdu pdu = con.pngBuff.firstElement();
+					log.info("Erstes Bufferelement" + pdu.getOpId());
+
+					// Switch block für die verschiedenen Nachrichtentypen
 					switch (pdu.getOpId()) {
+
+					// OPID für Anfrage Verbindungsaufbau
 					case LWTRTPdu.OPID_CONNECT_REQ:
-						log.debug("Connect Request für bestehende Verbindung erhalten. Paket wird verworfen");
-						connection.pingBuffer.remove(pdu);
+						con.pngBuff.remove(pdu);
 						break;
+
+					// OPID für Antwort Verbindungsaufbau
 					case LWTRTPdu.OPID_CONNECT_RSP:
-						log.debug("Connect Response für bestehende Verbindung erhalten. Paket wird verworfen");
-						connection.pingBuffer.remove(pdu);
+						con.pngBuff.remove(pdu);
 						break;
+
+					// OPID für Anfrage Verbindungsabbau
 					case LWTRTPdu.OPID_DISCONNECT_REQ:
+
 						LWTRTPdu respondeData2 = new LWTRTPdu();
 						respondeData2
 								.setSequenceNumber(pdu.getSequenceNumber());
-						respondeData2.setRemoteAddress(connection.remAdr);
-						respondeData2.setRemotePort(connection.remPort);
-
+						respondeData2.setRemoteAddress(con.remAdr);
+						respondeData2.setRemotePort(con.remPort);
 						respondeData2.setOpId(LWTRTPdu.OPID_DISCONNECT_RSP);
 
 						try {
-							connection.udpw.send(respondeData2);
-							log.debug("Versendete Verbindungsabbauantwort");
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							con.udpw.send(respondeData2);
+						} catch (IOException ex) {
+							log.error("Fehler beim Verbindungsaufbau: " + ex);
+							ex.printStackTrace();
 						}
 
-						connection.pingBuffer.remove(pdu);
+						con.pngBuff.remove(pdu);
+
 						try {
-							connection.finalize();
-						} catch (Throwable e2) {
-							// TODO Auto-generated catch block
-							e2.printStackTrace();
+							con.finalize();
+						} catch (Throwable ex2) {
+							log.error("Fehler beim Verbindungsaufbau: " + ex2);
+							ex2.printStackTrace();
 						}
+
 						this.stop();
+
 						break;
+
+					// OPID für Antwort Verbindungsabbau
 					case LWTRTPdu.OPID_DISCONNECT_RSP:
 
-						connection.pingBuffer.remove(pdu);
+						con.pngBuff.remove(pdu);
+
 						try {
-							connection.finalize();
-						} catch (Throwable e2) {
-							// TODO Auto-generated catch block
-							e2.printStackTrace();
+							con.finalize();
+						} catch (Throwable ex) {
+							log.error("Fehler beim Verbindungsabbau: " + ex);
+							ex.printStackTrace();
 						}
+
 						this.stop();
 						break;
+
+					// OPID für Anfrage DatenSenden
 					case LWTRTPdu.OPID_DATA_REQ:
+
 						LWTRTPdu respondeData = new LWTRTPdu();
 						respondeData.setSequenceNumber(pdu.getSequenceNumber());
-						respondeData.setRemoteAddress(connection.remAdr);
-						respondeData.setRemotePort(connection.remPort);
+						respondeData.setRemoteAddress(con.remAdr);
+						respondeData.setRemotePort(con.remPort);
 						respondeData.setOpId(LWTRTPdu.OPID_DATA_RSP);
 
 						try {
-							connection.udpw.send(respondeData);
-							log.debug("Versendete Antwort");
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							con.udpw.send(respondeData);
+						} catch (IOException ex) {
+							log.error("Fehler bei der Übermittlung der Nachricht: "
+									+ ex);
+							ex.printStackTrace();
 						}
-						connection.pickupBuffer.add(pdu);
-						connection.pingBuffer.remove(pdu);
+						con.pickUpBuff.add(pdu);
+						con.pngBuff.remove(pdu);
+
 						break;
+
+					// OPID für Antwort DatenSenden
 					case LWTRTPdu.OPID_DATA_RSP:
-						if (pdu.getSequenceNumber() == connection.sequenceNumber) {
-							connection.sendingSuccess = true;
+
+						if (pdu.getSequenceNumber() == con.seqNr) {
+							con.sendSuc = true;
 						}
 
-						log.debug("Versand OK");
-						connection.pingBuffer.remove(pdu);
+						log.info("Versand Erfolgreich");
+						con.pngBuff.remove(pdu);
 						break;
+
+					// OPID für Anfrage Ping
 					case LWTRTPdu.OPID_PING_REQ:
 						try {
-							connection.pingRSP();
-							log.debug("Message erhalten:"
-									+ pdu.getUserData().toString());
-						} catch (LWTRTException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							con.pingRSP();
+						} catch (LWTRTException ex) {
+							log.error("Fehler beim Versenden des Ping: " + ex);
+							ex.printStackTrace();
 						}
+
+						// OPID für Antwort Ping
 					case LWTRTPdu.OPID_PING_RSP:
-						connection.pingBuffer.add(pdu);
-						connection.pingBuffer.remove(pdu);
+						con.pngBuff.add(pdu);
+						con.pngBuff.remove(pdu);
 						break;
 					}
 
@@ -344,9 +392,14 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 		}
 	}
 
-	/*
-	 * Getter und Setter
-	 */
+	// Getter und Setter
+	public void setAdress(String adress) {
+		this.adress = adress;
+	}
+
+	public String getAdress() {
+		return adress;
+	}
 
 	public String getRemAdr() {
 		return remAdr;
@@ -373,10 +426,10 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 	}
 
 	public Vector<LWTRTPdu> getPingBuffer() {
-		return pingBuffer;
+		return pngBuff;
 	}
 
 	public void setPingBuffer(Vector<LWTRTPdu> pingBuffer) {
-		this.pingBuffer = pingBuffer;
+		this.pngBuff = pingBuffer;
 	}
 }

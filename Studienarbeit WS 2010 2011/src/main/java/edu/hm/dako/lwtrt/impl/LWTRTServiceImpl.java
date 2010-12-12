@@ -1,11 +1,9 @@
 package edu.hm.dako.lwtrt.impl;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.Calendar;
-import java.util.Vector;
+// Imports
+import java.net.*;
+import java.io.*;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.logging.Log;
@@ -23,7 +21,6 @@ import edu.hm.dako.udp.wrapper.UdpSocketWrapper;
  * @author Hochschule München
  * @version 1.0.0
  */
-// TODO KOmmentare
 public class LWTRTServiceImpl implements LWTRTService {
 
 	// variable for logging
@@ -35,14 +32,23 @@ public class LWTRTServiceImpl implements LWTRTService {
 	// variable for portnummer
 	int port;
 
-	private String adress;
-	private UdpSocketWrapper receiveWrapper;
-	private int sequenceNumber;
-
-	private static volatile Vector<LWTRTPdu> pingBuffer = new Vector<LWTRTPdu>();
-
-	protected static ConcurrentHashMap<Integer, LWTRTConnectionImpl> connectionMap = new ConcurrentHashMap<Integer, LWTRTConnectionImpl>();
+	// variable for first port
 	private int firstPort;
+
+	// variable for ip-adress
+	private String adress;
+
+	// Socket wrapper for reviving
+	private UdpSocketWrapper recWra;
+
+	// variable foe sequencenumber
+	private int seqNr;
+
+	// variable for Buffer
+	private static volatile Vector<LWTRTPdu> buffer = new Vector<LWTRTPdu>();
+
+	// hashmap for new connection
+	protected static ConcurrentHashMap<Integer, LWTRTConnectionImpl> connectionMap = new ConcurrentHashMap<Integer, LWTRTConnectionImpl>();
 
 	/**
 	 * Registrieren einer Anwendung und Port aktivieren
@@ -56,7 +62,6 @@ public class LWTRTServiceImpl implements LWTRTService {
 		try {
 			UdpSocketWrapper udpsw = new UdpSocketWrapper(port);
 			socketmap.put(port, udpsw);
-			// TODO Wird der Port korrekt in die LogFiles geschrien?
 			log.debug("Register LWTRTPort. Portnumber:"
 					+ LWTRTServiceImpl.socketmap.get(port));
 		} catch (Exception ex) {
@@ -78,8 +83,6 @@ public class LWTRTServiceImpl implements LWTRTService {
 	 */
 	public void unregister() throws LWTRTException {
 		UdpSocketWrapper udpswu;
-
-		// TODO Prüfen, ob Logfiles korrekt geschrieben werden
 		try {
 			udpswu = LWTRTServiceImpl.socketmap.get((Integer) port);
 			log.debug("Port " + port + " wurde aus Socketmap geholt");
@@ -88,15 +91,25 @@ public class LWTRTServiceImpl implements LWTRTService {
 			udpswu.close();
 			log.debug("SocketWrapper wurde geschlossen.");
 		} catch (Exception ex) {
-			log.error("Fehler bei De-Regestrierung der Ports:" + port + " "
+			log.error("Fehler bei De-Regestrierung der Ports: " + port + " "
 					+ ex);
 			ex.printStackTrace();
 		}
 
 	}
 
-	@Override
-	// TODO Kommentare
+	/**
+	 * Stellt eine Verbidung her, welche die Verbindungssicherheit für die
+	 * UDP-Verbindung gewährleistet.
+	 * 
+	 * 
+	 * @param remoteAddress
+	 *            IP Adresse des Remoterechners
+	 * @param remotePort
+	 *            port des Remoterechners
+	 * @throws LWTRTException
+	 * @author Florian Leicher
+	 */
 	public LWTRTConnection connect(String remoteAddress, int remotePort)
 			throws LWTRTException {
 		UdpSocketWrapper udpSocketWra;
@@ -105,27 +118,29 @@ public class LWTRTServiceImpl implements LWTRTService {
 		if (udpSocketWra == null) {
 			try {
 				udpSocketWra = new UdpSocketWrapper(port);
-			} catch (SocketException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (SocketException ex) {
+				log.error("Fehler beim initialisieren des Ports: " + port + ""
+						+ ex);
+				ex.printStackTrace();
 			}
 		}
-		log.debug("--socketmap:" + udpSocketWra);
+
 		LWTRTPdu Pdu = new LWTRTPdu();
 		Pdu.setOpId(LWTRTPdu.OPID_CONNECT_REQ);
-		sequenceNumber = 0;
-		Pdu.setSequenceNumber(sequenceNumber);
+		// Sequeznummer beim start der Verbindung auf 0 setzen
+		seqNr = 0;
+		Pdu.setSequenceNumber(seqNr);
 
 		Calendar cal = Calendar.getInstance();
 		long time;
 
 		LWTRTPdu receivePdu = new LWTRTPdu();
-		System.out.println("While schleife gestartet");
+		log.debug("For Schleife gestartet");
 		for (int retries = 0; retries < 3; retries++) {
 			try {
 				udpSocketWra.send(Pdu);
 			} catch (IOException e1) {
-
+				log.error(e1);
 				e1.printStackTrace();
 			}
 			time = cal.getTimeInMillis() + 5000;
@@ -135,61 +150,63 @@ public class LWTRTServiceImpl implements LWTRTService {
 
 					udpSocketWra.receive(receivePdu);
 					if (receivePdu != null) {
-						System.out.println("While Schleife beendet!!!!!!");
 						break;
 					}
 
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				log.error(e);
 				e.printStackTrace();
 			}
 			if (receivePdu != null) {
-				System.out.println("For Schleife beendet!!!!!!");
+				log.debug("For Schleife beendet");
 				break;
 			}
 		}
 
 		LWTRTConnectionImpl con = new LWTRTConnectionImpl(adress, port,
 				receivePdu.getRemoteAddress(), receivePdu.getRemotePort());
-		LWTRTServiceImpl.connectionMap.put(port, con);
-		log.debug("Antwort:" + receivePdu.getRemotePort() + "-"
-				+ receivePdu.getOpId() + "-" + receivePdu.getSequenceNumber());
-		recThread rt = new recThread(udpSocketWra, con);
 
-		rt.start();
+		LWTRTServiceImpl.connectionMap.put(port, con);
+
+		log.debug("Answer:" + receivePdu.getRemotePort() + " "
+				+ receivePdu.getOpId() + " " + receivePdu.getSequenceNumber());
+
+		recThread recThread = new recThread(udpSocketWra, con);
+
+		recThread.start();
 		return con;
 	}
 
-	@Override
-	// TODO Kommentare anpassen
+	/**
+	 * Annahme einer eingehenden Verbindung
+	 * 
+	 * @throws LWTRTException
+	 * @author Florian Leicher
+	 */
 	public LWTRTConnection accept() throws LWTRTException {
 		LWTRTPdu receivePDU = new LWTRTPdu();
 		UdpSocketWrapper receiver = LWTRTServiceImpl.socketmap
 				.get((Integer) port);
-		log.debug("Receiver Port:"
-				+ LWTRTServiceImpl.socketmap.get((Integer) port).getLocalPort());
 		try {
 			adress = (String) InetAddress.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e1) {
-			// TODO Auto-generated catch block
+			log.error("Fehler beim setzen der Adresse" + " " + e1);
 			e1.printStackTrace();
 		}
 		while (true) {
 			try {
-
 				receiver.receive(receivePDU);
-
-			}
-			// TODO Auto-generated catch block
-			catch (IOException e) {
-				e.printStackTrace();
+			} catch (IOException ex) {
+				log.error(ex);
+				ex.printStackTrace();
 			}
 			if (receivePDU != null) {
-				System.out.println(receivePDU.getOpId());
+				log.info(receivePDU.getOpId());
 				break;
 			}
 		}
+
 		LWTRTPdu respondePdu = new LWTRTPdu();
 		respondePdu.setRemotePort(receivePDU.getRemotePort());
 		respondePdu.setRemoteAddress(receivePDU.getRemoteAddress());
@@ -197,22 +214,25 @@ public class LWTRTServiceImpl implements LWTRTService {
 		respondePdu.setOpId(2);
 
 		try {
-			receiveWrapper = new UdpSocketWrapper(firstPort);
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			recWra = new UdpSocketWrapper(firstPort);
+		} catch (SocketException ex) {
+			log.error(ex);
+			ex.printStackTrace();
 		}
+
 		try {
-			receiveWrapper.send(respondePdu);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			recWra.send(respondePdu);
+		} catch (IOException ex) {
+			log.error(ex);
+			ex.printStackTrace();
 		}
-		LWTRTServiceImpl.socketmap.put((Integer) firstPort, receiveWrapper);
-		log.debug(receiveWrapper.getLocalPort());
+
+		LWTRTServiceImpl.socketmap.put((Integer) firstPort, recWra);
+		log.debug(recWra.getLocalPort());
 
 		LWTRTConnectionImpl con = new LWTRTConnectionImpl(adress, firstPort,
 				adress, firstPort);
+
 		recThread receiverThread2 = new recThread(receiver, con);
 		receiverThread2.start();
 
@@ -221,35 +241,39 @@ public class LWTRTServiceImpl implements LWTRTService {
 		return con;
 	}
 
-	// TODO KOmmentare
-	public class verteilerThread extends Thread {
-		LWTRTPdu zuVerteilen;
-		LWTRTConnectionImpl verteilen;
+	/**
+	 * Neue innerclass für das sharing
+	 * 
+	 * @author Florian Leicher
+	 */
+	public class shareThread extends Thread {
 
-		public verteilerThread() {
+		LWTRTPdu toShare;
+		LWTRTConnectionImpl sharing;
 
+		public shareThread() {
 		}
 
-		@Override
 		public void run() {
 
-			log.debug("Verteiler gestartet");
+			log.debug("sThread started");
 			while (true) {
-				if (!LWTRTServiceImpl.pingBuffer.isEmpty()) {
-					zuVerteilen = LWTRTServiceImpl.pingBuffer.firstElement();
-					this.verteilen = LWTRTServiceImpl.connectionMap
-							.get((Integer) zuVerteilen.getRemotePort());
-					synchronized (verteilen) {
-						verteilen.pingBuffer.add(zuVerteilen);
+				if (!LWTRTServiceImpl.buffer.isEmpty()) {
+					toShare = LWTRTServiceImpl.buffer.firstElement();
+					this.sharing = LWTRTServiceImpl.connectionMap
+							.get((Integer) toShare.getRemotePort());
+					synchronized (sharing) {
+						sharing.pngBuff.add(toShare);
 					}
-					LWTRTServiceImpl.pingBuffer.remove(zuVerteilen);
+					LWTRTServiceImpl.buffer.remove(toShare);
 				}
+
 				{
 					try {
 						Thread.sleep(50);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					} catch (InterruptedException ex) {
+						log.error(ex);
+						ex.printStackTrace();
 					}
 				}
 
@@ -259,13 +283,11 @@ public class LWTRTServiceImpl implements LWTRTService {
 	}
 
 	/**
-	 * Erstellt eine neue Klasse und startet Thread. Lauscht nach eingehenden
-	 * UdpSockets und legt diese in ReceiveBuffer.
+	 * Neue innerclass welche einen UDPSocket launscht und in den Buffer legt.
 	 * 
 	 * @author Florian Leicher
 	 * 
 	 */
-	// TODO KOmmentare
 	public class recThread extends Thread {
 		UdpSocketWrapper udpsocket;
 		LWTRTConnectionImpl connection;
@@ -273,8 +295,7 @@ public class LWTRTServiceImpl implements LWTRTService {
 		public recThread(UdpSocketWrapper udpsocket, LWTRTConnectionImpl con) {
 			this.udpsocket = udpsocket;
 			this.connection = con;
-			log.debug("Receivertread für " + this + "gestartet "
-					+ udpsocket.getLocalPort());
+			log.debug("Receivertread gestartet " + udpsocket.getLocalPort());
 		}
 
 		@SuppressWarnings("deprecation")
@@ -285,15 +306,13 @@ public class LWTRTServiceImpl implements LWTRTService {
 
 				try {
 					udpsocket.receive(receivePDU);
-					// TODO Auto-generated catch block
-				} catch (IOException e) {
-					e.printStackTrace();
-					System.out.println("Socket ist geschlossen!");
+				} catch (IOException ex) {
+					ex.printStackTrace();
+					log.info("Socket wurde geschlossen! " + ex);
 					this.stop();
 				}
 				{
-					this.connection.pingBuffer.add(receivePDU);
-					log.debug(" " + receivePDU.getOpId());
+					this.connection.pngBuff.add(receivePDU);
 				}
 
 			}
