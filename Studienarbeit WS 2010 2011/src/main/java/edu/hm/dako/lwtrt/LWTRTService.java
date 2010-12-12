@@ -65,6 +65,6 @@ public interface LWTRTService {
      * @throws LWTRTException Fehler beim Verbindungsaufbau
      */
     
-    public LWTRTConnection accept(int port) throws LWTRTException;
+    public LWTRTConnection accept() throws LWTRTException;
 
 }
