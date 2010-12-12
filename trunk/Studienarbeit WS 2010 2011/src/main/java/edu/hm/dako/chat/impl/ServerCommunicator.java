@@ -3,6 +3,7 @@ package edu.hm.dako.chat.impl;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Map.Entry;
@@ -34,6 +35,7 @@ public class ServerCommunicator extends Thread implements ChatServerListener {
 	private ChatServerService chatServerService;
 
 	public static void main(String args[]) {
+		
 		try {
 			PropertyConfigurator.configureAndWatch("log4j.properties",
 					60 * 1000);
@@ -49,6 +51,8 @@ public class ServerCommunicator extends Thread implements ChatServerListener {
 
 				ServerCommunicator communicator = new ServerCommunicator(
 						service);
+				
+				communicator.start();
 
 			}
 		} catch (Exception e) {
@@ -108,8 +112,6 @@ public class ServerCommunicator extends Thread implements ChatServerListener {
 		
 	}
 		
-	
-
 	public void onLogin(String username) {
 		if (!sessions.containsKey(username)) {
 			sessions.put(username, chatServerService);

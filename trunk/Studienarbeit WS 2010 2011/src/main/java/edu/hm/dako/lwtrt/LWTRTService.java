@@ -51,6 +51,7 @@ public interface LWTRTService {
      */
     public LWTRTConnection connect(String remoteAddress, int remotePort) throws LWTRTException;
 
+	
     /**
      * Passiver Verbindungsaufbau.<p>
      * Auf einem zuvor registrierten Port wird auf eingehende Verbindungswünsche passiv gewartet.
@@ -58,9 +59,12 @@ public interface LWTRTService {
      * Dienstnehmer übergeben. Innerhalb des Timeouts muss der Dienstnehmer die Verbindung
      * akzeptieren. Erst nach dem explizieten Akzeptieren der Verbindung ist der Aufbau erfolgt.
      * Erfolgt innerhalb des Timeout keine Akzptierung, wird die Verbingung nicht augebaut.
+     * @param port 
      * @see LWTRTConnection#acceptConnection()
      * @return Verbindung (vor dem Akzeptieren) - noch nicht bereit zum Senden von Daten
      * @throws LWTRTException Fehler beim Verbindungsaufbau
      */
-    public LWTRTConnection accept() throws LWTRTException;
+    
+    public LWTRTConnection accept(int port) throws LWTRTException;
+
 }
