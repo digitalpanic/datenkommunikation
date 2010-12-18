@@ -6,15 +6,29 @@ import org.apache.commons.logging.LogFactory;
 import edu.hm.dako.chatsession.ChatClientService;
 import edu.hm.dako.chatsession.ChatClientServiceFactory;
 import edu.hm.dako.chatsession.ex.ChatServiceException;
+import edu.hm.dako.lwtrt.ex.LWTRTException;
+import edu.hm.dako.test.mocks.LWTRTServiceMock;
 
 public class ChatClientServiceFactoryImpl implements ChatClientServiceFactory {
 	private static Log log = LogFactory.getLog(BaseServiceImpl.class);
+	
+	private LWTRTServiceMock sMock = new LWTRTServiceMock();
 
+	
+
+	/**
+	 * @param port
+	 * @return ChatClientServiceImpl
+	 * @autor Pavlo Bishko
+	 */
 	@Override
 	public ChatClientService register(int port) throws ChatServiceException {
-		ChatClientServiceImpl client = new ChatClientServiceImpl();
-		client.setListenport(port);
-		return client;
+		try{
+			sMock.register(port);
+		}catch(LWTRTException e){
+			e.printStackTrace();			
+		}
+		return new ChatClientServiceImpl();
 	}
 
 }

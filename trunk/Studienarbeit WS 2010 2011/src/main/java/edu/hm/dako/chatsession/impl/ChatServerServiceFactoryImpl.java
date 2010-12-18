@@ -9,6 +9,7 @@ import edu.hm.dako.chatsession.ex.ChatServiceException;
 import edu.hm.dako.lwtrt.LWTRTConnection;
 import edu.hm.dako.lwtrt.impl.LWTRTConnectionImpl;
 import edu.hm.dako.lwtrt.impl.LWTRTServiceImpl;
+import edu.hm.dako.test.mocks.LWTRTServiceMock;
 
 /**
  * The Enum ServerSessionFactoryImpl.
@@ -16,52 +17,73 @@ import edu.hm.dako.lwtrt.impl.LWTRTServiceImpl;
  * @author Hochschule München
  * @version 1.0.0
  */
+
 public class ChatServerServiceFactoryImpl implements ChatServerServiceFactory {
 
 	private static Log log = LogFactory
 			.getLog(ChatServerServiceFactoryImpl.class);
 	
 	 public int port;
+	 private LWTRTServiceMock sMock = new LWTRTServiceMock();
 
-	 private ChatServerServiceImpl createChatServerService(LWTRTConnection con) throws ChatServiceException {
+	 
+	 /**
+	 * @param con
+	 * @return csService
+	 * @throws ChatServiceException
+	 * @autor Pavlo Bishko
+	 */
+	private ChatServerServiceImpl createChatServerService(LWTRTConnection con) throws ChatServiceException {
 	        // TODO
-	    	System.out.println("wo1");
-	    	return new ChatServerServiceImpl(con, port);  //neu
+		ChatServerServiceImpl csService = new ChatServerServiceImpl(con, port);
+		//csService.set????
+		return csService;
+	    	
 	    }
+	
 
+
+	/**
+	 * @param port
+	 * @throws ChatServiceException
+	 * @autor Pavlo Bishko
+	 */
 	    public void register(int port) throws ChatServiceException {
 	    // TODO
-	    	this.port = port;
-	    	System.out.println("wo2");
 	    	try
 	    	{
-	    		System.out.println("try");
-	    		LWTRTServiceImpl.INSTANCE.register(port);
+	    		sMock.register(port);
 	    	}
 	    	
 	    	catch (Exception e)
 	    	{
-	    		System.out.println("catch");
-	    		e.printStackTrace();
+	    		throw new ChatServiceException(e);
 	    	} 	
 	    }
 
+	    
+	    /**
+		 * @return connect
+		 * @throws ChatServiceException
+		 * @autor Pavlo Bishko
+		 */
 	    public ChatServerService getSession() throws ChatServiceException {
 	        // TODO
-	    	ChatServerService css = null;
-	    	System.out.println("wo3");
+	    	LWTRTConnection connect;
 	    	try
 			{
-	    		LWTRTConnection con = LWTRTServiceImpl.INSTANCE.accept(port);
-	    		css = new ChatServerServiceImpl(con, port); 
+		    		connect = sMock.accept();
 			}
 			
 			catch (Exception e)
 			{
-				e.printStackTrace();
-				System.out.println("Server couldn't accept the request");
+				throw new ChatServiceException("server couldn't accept the request!", e);
 			}
 			
-	        return css;
+	        return createChatServerService(connect);
 	    }
+	
+	    
+
+	
 	}
