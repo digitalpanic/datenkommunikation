@@ -71,13 +71,6 @@ public class ChatClientServiceImpl extends BaseServiceImpl implements
 	@Override
 	public void registerChatSessionListener(ChatClientListener listener) {
 		this.listener = listener;
-		try {
-			// TO DO
-			// Threadaufruf implementiern!
-
-		} catch (ChatServiceException e) {
-			e.printStackTrace();
-		}
 
 	}
 
