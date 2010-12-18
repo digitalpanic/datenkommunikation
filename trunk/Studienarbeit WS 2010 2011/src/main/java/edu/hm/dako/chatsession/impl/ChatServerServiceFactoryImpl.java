@@ -24,8 +24,8 @@ public class ChatServerServiceFactoryImpl implements ChatServerServiceFactory {
 			.getLog(ChatServerServiceFactoryImpl.class);
 	
 	 public int port;
-	 //private LWTRTServiceMock sMock = new LWTRTServiceMock();
-	 private LWTRTServiceImpl sMock = new LWTRTServiceImpl();
+	 private LWTRTServiceMock sMock = new LWTRTServiceMock();
+	 //private LWTRTServiceImpl sMock = new LWTRTServiceImpl();
 	 
 	 /**
 	 * @param con

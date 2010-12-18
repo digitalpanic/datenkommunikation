@@ -13,8 +13,8 @@ import edu.hm.dako.test.mocks.LWTRTServiceMock;
 public class ChatClientServiceFactoryImpl implements ChatClientServiceFactory {
 	private static Log log = LogFactory.getLog(BaseServiceImpl.class);
 	
-	//private LWTRTServiceMock sMock = new LWTRTServiceMock();
-	private LWTRTServiceImpl sMock = new LWTRTServiceImpl();
+	private LWTRTServiceMock sMock = new LWTRTServiceMock();
+	//private LWTRTServiceImpl sMock = new LWTRTServiceImpl();
 	
 
 	/**
