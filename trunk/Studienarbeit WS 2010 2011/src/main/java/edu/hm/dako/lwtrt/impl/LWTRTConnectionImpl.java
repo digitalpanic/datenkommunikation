@@ -59,6 +59,29 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 	}
 
 	/**
+	 * Akzeptieren des Verbindungsabbau.
+	 * 
+	 * @author Florian Leicher
+	 */
+	public void acceptDisconnection() throws LWTRTException {
+
+		LWTRTPdu pdu = new LWTRTPdu();
+		pdu.setRemoteAddress(remAdr);
+		pdu.setRemotePort(remPort);
+		pdu.setOpId(LWTRTPdu.OPID_DISCONNECT_RSP);
+
+		try {
+			udpw.send(pdu);
+		} catch (SocketException ex) {
+			ex.printStackTrace();
+			log.error("Socketerror: " + ex);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			log.error("IO Exceptoion: " + ex);
+		}
+	}
+
+	/**
 	 * Abbau der Verbindung
 	 * 
 	 * @author Florian Leicher
@@ -97,29 +120,6 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 		setSeqNr();
 		timer.stop();
 
-	}
-
-	/**
-	 * Akzeptieren des Verbindungsabbau.
-	 * 
-	 * @author Florian Leicher
-	 */
-	public void acceptDisconnection() throws LWTRTException {
-
-		LWTRTPdu pdu = new LWTRTPdu();
-		pdu.setRemoteAddress(remAdr);
-		pdu.setRemotePort(remPort);
-		pdu.setOpId(LWTRTPdu.OPID_DISCONNECT_RSP);
-
-		try {
-			udpw.send(pdu);
-		} catch (SocketException ex) {
-			ex.printStackTrace();
-			log.error("Socketerror: " + ex);
-		} catch (IOException ex) {
-			ex.printStackTrace();
-			log.error("IO Exceptoion: " + ex);
-		}
 	}
 
 	/**

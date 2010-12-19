@@ -51,23 +51,66 @@ public class LWTRTServiceImpl implements LWTRTService {
 	protected static ConcurrentHashMap<Integer, LWTRTConnectionImpl> connectionMap = new ConcurrentHashMap<Integer, LWTRTConnectionImpl>();
 
 	/**
-	 * Registrieren einer Anwendung und Port aktivieren
+	 * Annahme einer eingehenden Verbindung
 	 * 
-	 * @param localPort
-	 *            Portnumber
 	 * @throws LWTRTException
 	 * @author Florian Leicher
 	 */
-	public void register(int port) throws LWTRTException {
+	public LWTRTConnection accept() throws LWTRTException {
+		LWTRTPdu receivePDU = new LWTRTPdu();
+		UdpSocketWrapper receiver = LWTRTServiceImpl.socketmap
+				.get((Integer) port);
 		try {
-			UdpSocketWrapper udpsw = new UdpSocketWrapper(port);
-			socketmap.put(port, udpsw);
-			log.debug("Register LWTRTPort. Portnumber:"
-					+ LWTRTServiceImpl.socketmap.get(port));
-		} catch (Exception ex) {
-			log.error("Fehler bei Regestrierung der Ports:" + ex);
+			adress = (String) InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e1) {
+			log.error("Fehler beim setzen der Adresse" + " " + e1);
+			e1.printStackTrace();
+		}
+		while (true) {
+			try {
+				receiver.receive(receivePDU);
+			} catch (IOException ex) {
+				log.error(ex);
+				ex.printStackTrace();
+			}
+			if (receivePDU != null) {
+				log.info(receivePDU.getOpId());
+				break;
+			}
+		}
+
+		LWTRTPdu respondePdu = new LWTRTPdu();
+		respondePdu.setRemotePort(receivePDU.getRemotePort());
+		respondePdu.setRemoteAddress(receivePDU.getRemoteAddress());
+		respondePdu.setSequenceNumber(receivePDU.getSequenceNumber());
+		respondePdu.setOpId(2);
+
+		try {
+			recWra = new UdpSocketWrapper(firstPort);
+		} catch (SocketException ex) {
+			log.error(ex);
 			ex.printStackTrace();
 		}
+
+		try {
+			recWra.send(respondePdu);
+		} catch (IOException ex) {
+			log.error(ex);
+			ex.printStackTrace();
+		}
+
+		LWTRTServiceImpl.socketmap.put((Integer) firstPort, recWra);
+		log.debug(recWra.getLocalPort());
+
+		LWTRTConnectionImpl con = new LWTRTConnectionImpl(adress, firstPort,
+				adress, firstPort);
+
+		recThread receiverThread2 = new recThread(receiver, con);
+		receiverThread2.start();
+
+		LWTRTServiceImpl.connectionMap.put((Integer) firstPort, con);
+		this.firstPort++;
+		return con;
 	}
 
 	/**
@@ -96,6 +139,26 @@ public class LWTRTServiceImpl implements LWTRTService {
 			ex.printStackTrace();
 		}
 
+	}
+
+	/**
+	 * Registrieren einer Anwendung und Port aktivieren
+	 * 
+	 * @param localPort
+	 *            Portnumber
+	 * @throws LWTRTException
+	 * @author Florian Leicher
+	 */
+	public void register(int port) throws LWTRTException {
+		try {
+			UdpSocketWrapper udpsw = new UdpSocketWrapper(port);
+			socketmap.put(port, udpsw);
+			log.debug("Register LWTRTPort. Portnumber:"
+					+ LWTRTServiceImpl.socketmap.get(port));
+		} catch (Exception ex) {
+			log.error("Fehler bei Regestrierung der Ports:" + ex);
+			ex.printStackTrace();
+		}
 	}
 
 	/**
@@ -175,69 +238,6 @@ public class LWTRTServiceImpl implements LWTRTService {
 		recThread recThread = new recThread(udpSocketWra, con);
 
 		recThread.start();
-		return con;
-	}
-
-	/**
-	 * Annahme einer eingehenden Verbindung
-	 * 
-	 * @throws LWTRTException
-	 * @author Florian Leicher
-	 */
-	public LWTRTConnection accept() throws LWTRTException {
-		LWTRTPdu receivePDU = new LWTRTPdu();
-		UdpSocketWrapper receiver = LWTRTServiceImpl.socketmap
-				.get((Integer) port);
-		try {
-			adress = (String) InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e1) {
-			log.error("Fehler beim setzen der Adresse" + " " + e1);
-			e1.printStackTrace();
-		}
-		while (true) {
-			try {
-				receiver.receive(receivePDU);
-			} catch (IOException ex) {
-				log.error(ex);
-				ex.printStackTrace();
-			}
-			if (receivePDU != null) {
-				log.info(receivePDU.getOpId());
-				break;
-			}
-		}
-
-		LWTRTPdu respondePdu = new LWTRTPdu();
-		respondePdu.setRemotePort(receivePDU.getRemotePort());
-		respondePdu.setRemoteAddress(receivePDU.getRemoteAddress());
-		respondePdu.setSequenceNumber(receivePDU.getSequenceNumber());
-		respondePdu.setOpId(2);
-
-		try {
-			recWra = new UdpSocketWrapper(firstPort);
-		} catch (SocketException ex) {
-			log.error(ex);
-			ex.printStackTrace();
-		}
-
-		try {
-			recWra.send(respondePdu);
-		} catch (IOException ex) {
-			log.error(ex);
-			ex.printStackTrace();
-		}
-
-		LWTRTServiceImpl.socketmap.put((Integer) firstPort, recWra);
-		log.debug(recWra.getLocalPort());
-
-		LWTRTConnectionImpl con = new LWTRTConnectionImpl(adress, firstPort,
-				adress, firstPort);
-
-		recThread receiverThread2 = new recThread(receiver, con);
-		receiverThread2.start();
-
-		LWTRTServiceImpl.connectionMap.put((Integer) firstPort, con);
-		this.firstPort++;
 		return con;
 	}
 
