@@ -1,0 +1,217 @@
+2010-12-18 17:43:01,564 INFO  [AWT-EventQueue-0] edu.hm.dako.chat.impl.ClientCommunicator: Trying to set Listenport to 51000
+2010-12-18 17:45:07,083 INFO  [AWT-EventQueue-0] edu.hm.dako.chat.impl.ClientCommunicator: Trying to set Listenport to 51000
+2010-12-18 17:47:46,596 DEBUG [main] edu.hm.dako.test.mocks.LWTRTServiceMock: Accept on 5000
+2010-12-18 17:48:08,794 INFO  [AWT-EventQueue-0] edu.hm.dako.chat.impl.ClientCommunicator: Trying to set Listenport to 51000
+2010-12-18 17:49:10,417 DEBUG [main] edu.hm.dako.test.mocks.LWTRTServiceMock: Accept on 5000
+2010-12-18 17:49:10,464 ERROR [main] edu.hm.dako.lwtrt.ex.LWTRTException: 
+edu.hm.dako.lwtrt.ex.LWTRTException: java.net.BindException: Address already in use: JVM_Bind
+	at edu.hm.dako.test.mocks.LWTRTServiceMock.accept(LWTRTServiceMock.java:61)
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:75)
+	at edu.hm.dako.chat.impl.ServerCommunicator.main(ServerCommunicator.java:50)
+Caused by: java.net.BindException: Address already in use: JVM_Bind
+	at java.net.PlainSocketImpl.socketBind(Native Method)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at edu.hm.dako.test.mocks.LWTRTServiceMock.accept(LWTRTServiceMock.java:54)
+	... 2 more
+2010-12-18 17:49:10,480 ERROR [main] edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:80)
+	at edu.hm.dako.chat.impl.ServerCommunicator.main(ServerCommunicator.java:50)
+Caused by: edu.hm.dako.lwtrt.ex.LWTRTException: java.net.BindException: Address already in use: JVM_Bind
+	at edu.hm.dako.test.mocks.LWTRTServiceMock.accept(LWTRTServiceMock.java:61)
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:75)
+	... 1 more
+Caused by: java.net.BindException: Address already in use: JVM_Bind
+	at java.net.PlainSocketImpl.socketBind(Native Method)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at edu.hm.dako.test.mocks.LWTRTServiceMock.accept(LWTRTServiceMock.java:54)
+	... 2 more
+2010-12-18 17:49:15,893 DEBUG [main] edu.hm.dako.test.mocks.LWTRTServiceMock: Accept on 5000
+2010-12-18 17:49:15,909 ERROR [main] edu.hm.dako.lwtrt.ex.LWTRTException: 
+edu.hm.dako.lwtrt.ex.LWTRTException: java.net.BindException: Address already in use: JVM_Bind
+	at edu.hm.dako.test.mocks.LWTRTServiceMock.accept(LWTRTServiceMock.java:61)
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:75)
+	at edu.hm.dako.chat.impl.ServerCommunicator.main(ServerCommunicator.java:50)
+Caused by: java.net.BindException: Address already in use: JVM_Bind
+	at java.net.PlainSocketImpl.socketBind(Native Method)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at edu.hm.dako.test.mocks.LWTRTServiceMock.accept(LWTRTServiceMock.java:54)
+	... 2 more
+2010-12-18 17:49:15,909 ERROR [main] edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:80)
+	at edu.hm.dako.chat.impl.ServerCommunicator.main(ServerCommunicator.java:50)
+Caused by: edu.hm.dako.lwtrt.ex.LWTRTException: java.net.BindException: Address already in use: JVM_Bind
+	at edu.hm.dako.test.mocks.LWTRTServiceMock.accept(LWTRTServiceMock.java:61)
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:75)
+	... 1 more
+Caused by: java.net.BindException: Address already in use: JVM_Bind
+	at java.net.PlainSocketImpl.socketBind(Native Method)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at edu.hm.dako.test.mocks.LWTRTServiceMock.accept(LWTRTServiceMock.java:54)
+	... 2 more
+2010-12-18 17:49:37,983 DEBUG [main] edu.hm.dako.test.mocks.LWTRTServiceMock: Accept on 5000
+2010-12-18 17:49:37,983 ERROR [main] edu.hm.dako.lwtrt.ex.LWTRTException: 
+edu.hm.dako.lwtrt.ex.LWTRTException: java.net.BindException: Address already in use: JVM_Bind
+	at edu.hm.dako.test.mocks.LWTRTServiceMock.accept(LWTRTServiceMock.java:61)
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:75)
+	at edu.hm.dako.chat.impl.ServerCommunicator.main(ServerCommunicator.java:50)
+Caused by: java.net.BindException: Address already in use: JVM_Bind
+	at java.net.PlainSocketImpl.socketBind(Native Method)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at edu.hm.dako.test.mocks.LWTRTServiceMock.accept(LWTRTServiceMock.java:54)
+	... 2 more
+2010-12-18 17:49:37,983 ERROR [main] edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:80)
+	at edu.hm.dako.chat.impl.ServerCommunicator.main(ServerCommunicator.java:50)
+Caused by: edu.hm.dako.lwtrt.ex.LWTRTException: java.net.BindException: Address already in use: JVM_Bind
+	at edu.hm.dako.test.mocks.LWTRTServiceMock.accept(LWTRTServiceMock.java:61)
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:75)
+	... 1 more
+Caused by: java.net.BindException: Address already in use: JVM_Bind
+	at java.net.PlainSocketImpl.socketBind(Native Method)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at edu.hm.dako.test.mocks.LWTRTServiceMock.accept(LWTRTServiceMock.java:54)
+	... 2 more
+2010-12-18 17:50:15,376 DEBUG [main] edu.hm.dako.test.mocks.LWTRTServiceMock: Accept on 5000
+2010-12-18 17:50:15,392 ERROR [main] edu.hm.dako.lwtrt.ex.LWTRTException: 
+edu.hm.dako.lwtrt.ex.LWTRTException: java.net.BindException: Address already in use: JVM_Bind
+	at edu.hm.dako.test.mocks.LWTRTServiceMock.accept(LWTRTServiceMock.java:61)
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:75)
+	at edu.hm.dako.chat.impl.ServerCommunicator.main(ServerCommunicator.java:50)
+Caused by: java.net.BindException: Address already in use: JVM_Bind
+	at java.net.PlainSocketImpl.socketBind(Native Method)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at edu.hm.dako.test.mocks.LWTRTServiceMock.accept(LWTRTServiceMock.java:54)
+	... 2 more
+2010-12-18 17:50:15,392 ERROR [main] edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:80)
+	at edu.hm.dako.chat.impl.ServerCommunicator.main(ServerCommunicator.java:50)
+Caused by: edu.hm.dako.lwtrt.ex.LWTRTException: java.net.BindException: Address already in use: JVM_Bind
+	at edu.hm.dako.test.mocks.LWTRTServiceMock.accept(LWTRTServiceMock.java:61)
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:75)
+	... 1 more
+Caused by: java.net.BindException: Address already in use: JVM_Bind
+	at java.net.PlainSocketImpl.socketBind(Native Method)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at edu.hm.dako.test.mocks.LWTRTServiceMock.accept(LWTRTServiceMock.java:54)
+	... 2 more
+2010-12-18 17:50:52,084 DEBUG [main] edu.hm.dako.test.mocks.LWTRTServiceMock: Accept on 5000
+2010-12-18 17:51:08,776 INFO  [AWT-EventQueue-0] edu.hm.dako.chat.impl.ClientCommunicator: Trying to set Listenport to 51000
+2010-12-18 18:06:28,559 DEBUG [main] edu.hm.dako.lwtrt.LWTRTService: Register LWTRTPort. Portnumber:edu.hm.dako.udp.wrapper.UdpSocketWrapper@6f507fb2
+2010-12-18 18:06:28,625 ERROR [main] edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:81)
+	at edu.hm.dako.chat.impl.ServerCommunicator.main(ServerCommunicator.java:50)
+Caused by: java.lang.NullPointerException
+	at edu.hm.dako.lwtrt.impl.LWTRTServiceImpl.accept(LWTRTServiceImpl.java:199)
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:76)
+	... 1 more
+2010-12-18 18:07:31,743 DEBUG [main] edu.hm.dako.lwtrt.LWTRTService: Register LWTRTPort. Portnumber:edu.hm.dako.udp.wrapper.UdpSocketWrapper@6016a786
+2010-12-18 18:07:31,759 ERROR [main] edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:81)
+	at edu.hm.dako.chat.impl.ServerCommunicator.main(ServerCommunicator.java:50)
+Caused by: java.lang.NullPointerException
+	at edu.hm.dako.lwtrt.impl.LWTRTServiceImpl.accept(LWTRTServiceImpl.java:199)
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:76)
+	... 1 more
+2010-12-18 18:22:18,653 DEBUG [main] edu.hm.dako.lwtrt.LWTRTService: Register LWTRTPort. Portnumber:edu.hm.dako.udp.wrapper.UdpSocketWrapper@defb836
+2010-12-18 18:22:18,669 ERROR [main] edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:81)
+	at edu.hm.dako.chat.impl.ServerCommunicator.main(ServerCommunicator.java:50)
+Caused by: java.lang.NullPointerException
+	at edu.hm.dako.lwtrt.impl.LWTRTServiceImpl.accept(LWTRTServiceImpl.java:199)
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:76)
+	... 1 more
+2010-12-18 18:24:55,624 DEBUG [main] edu.hm.dako.test.mocks.LWTRTServiceMock: Accept on 5000
+2010-12-18 18:25:18,666 INFO  [AWT-EventQueue-0] edu.hm.dako.chat.impl.ClientCommunicator: Trying to set Listenport to 51000
+2010-12-18 18:26:08,589 DEBUG [main] edu.hm.dako.lwtrt.LWTRTService: Register LWTRTPort. Portnumber:edu.hm.dako.udp.wrapper.UdpSocketWrapper@defb836
+2010-12-18 18:26:08,604 ERROR [main] edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:81)
+	at edu.hm.dako.chat.impl.ServerCommunicator.main(ServerCommunicator.java:50)
+Caused by: java.lang.NullPointerException
+	at edu.hm.dako.lwtrt.impl.LWTRTServiceImpl.accept(LWTRTServiceImpl.java:199)
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:76)
+	... 1 more
+2010-12-18 18:28:09,738 DEBUG [main] edu.hm.dako.lwtrt.LWTRTService: Register LWTRTPort. Portnumber:edu.hm.dako.udp.wrapper.UdpSocketWrapper@c5a67c9
+2010-12-18 18:28:16,433 ERROR [main] edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:81)
+	at edu.hm.dako.chat.impl.ServerCommunicator.main(ServerCommunicator.java:50)
+Caused by: java.lang.NullPointerException
+	at edu.hm.dako.lwtrt.impl.LWTRTServiceImpl.accept(LWTRTServiceImpl.java:199)
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:76)
+	... 1 more
+2010-12-18 18:28:37,464 DEBUG [main] edu.hm.dako.lwtrt.LWTRTService: Register LWTRTPort. Portnumber:edu.hm.dako.udp.wrapper.UdpSocketWrapper@52f6438d
+2010-12-18 18:32:29,233 ERROR [main] edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:81)
+	at edu.hm.dako.chat.impl.ServerCommunicator.main(ServerCommunicator.java:50)
+Caused by: java.lang.NullPointerException
+	at edu.hm.dako.lwtrt.impl.LWTRTServiceImpl.accept(LWTRTServiceImpl.java:199)
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:76)
+	... 1 more
+2010-12-18 18:33:31,667 DEBUG [main] edu.hm.dako.lwtrt.LWTRTService: Register LWTRTPort. Portnumber:edu.hm.dako.udp.wrapper.UdpSocketWrapper@25cd0888
+2010-12-18 18:33:31,667 ERROR [main] edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:81)
+	at edu.hm.dako.chat.impl.ServerCommunicator.main(ServerCommunicator.java:50)
+Caused by: java.lang.NullPointerException
+	at edu.hm.dako.lwtrt.impl.LWTRTServiceImpl.accept(LWTRTServiceImpl.java:199)
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:76)
+	... 1 more
+2010-12-18 18:34:06,236 DEBUG [main] edu.hm.dako.lwtrt.LWTRTService: Register LWTRTPort. Portnumber:edu.hm.dako.udp.wrapper.UdpSocketWrapper@25cd0888
+2010-12-18 18:34:15,752 ERROR [main] edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:81)
+	at edu.hm.dako.chat.impl.ServerCommunicator.main(ServerCommunicator.java:50)
+Caused by: java.lang.NullPointerException
+	at edu.hm.dako.lwtrt.impl.LWTRTServiceImpl.accept(LWTRTServiceImpl.java:199)
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:76)
+	... 1 more
+2010-12-18 18:37:32,491 DEBUG [main] edu.hm.dako.lwtrt.LWTRTService: Register LWTRTPort. Portnumber:edu.hm.dako.udp.wrapper.UdpSocketWrapper@52f6438d
+2010-12-18 19:09:32,832 DEBUG [main] edu.hm.dako.lwtrt.LWTRTService: Register LWTRTPort. Portnumber:edu.hm.dako.udp.wrapper.UdpSocketWrapper@6f507fb2
+2010-12-18 19:09:32,847 ERROR [main] edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+edu.hm.dako.chatsession.ex.ChatServiceException: server couldn't accept the request!
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:81)
+	at edu.hm.dako.chat.impl.ServerCommunicator.main(ServerCommunicator.java:50)
+Caused by: java.lang.NullPointerException
+	at edu.hm.dako.lwtrt.impl.LWTRTServiceImpl.accept(LWTRTServiceImpl.java:199)
+	at edu.hm.dako.chatsession.impl.ChatServerServiceFactoryImpl.getSession(ChatServerServiceFactoryImpl.java:76)
+	... 1 more
+2010-12-18 19:16:00,313 DEBUG [main] edu.hm.dako.test.mocks.LWTRTServiceMock: Accept on 5000
+2010-12-18 19:16:14,961 INFO  [AWT-EventQueue-0] edu.hm.dako.chat.impl.ClientCommunicator: Trying to set Listenport to 51000
+2010-12-18 19:17:17,457 INFO  [AWT-EventQueue-0] edu.hm.dako.chat.impl.ClientCommunicator: Trying to set Listenport to 51000
+2010-12-18 19:23:57,617 INFO  [AWT-EventQueue-0] edu.hm.dako.chat.impl.ClientCommunicator: Trying to set Listenport to 51000
+2010-12-18 19:24:41,571 INFO  [AWT-EventQueue-0] edu.hm.dako.chat.impl.ClientCommunicator: Trying to set Listenport to 51000
+2010-12-18 19:26:13,715 DEBUG [main] edu.hm.dako.test.mocks.LWTRTServiceMock: Accept on 5000
+2010-12-18 19:26:36,321 INFO  [AWT-EventQueue-0] edu.hm.dako.chat.impl.ClientCommunicator: Trying to set Listenport to 51000
