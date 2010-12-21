@@ -10,6 +10,7 @@ import edu.hm.dako.chatsession.pdu.ChatAction;
 import edu.hm.dako.chatsession.pdu.ChatMessage;
 import edu.hm.dako.chatsession.pdu.ChatPdu;
 import edu.hm.dako.lwtrt.ex.LWTRTException;
+import edu.hm.dako.test.mocks.LWTRTServiceMock;
 
 /**
  * The Class ClientSessionImpl.
@@ -24,15 +25,32 @@ public class ChatClientServiceImpl extends BaseServiceImpl implements
 	protected ChatClientListener listener;
 
 	@Override
-	public void create(String rcvAdd, int port, String name)
-			throws ChatServiceException {
-		if (currentStatus != SessionStatus.NO_SESSION) {
-			throw new ChatServiceException(
-					"Aufruf nicht m+glich. Falscher Status. Aktueller Status:"
-							+ currentStatus.toString());
-		}
+    public void create(String rcvAdd, int port, String name)
+            throws ChatServiceException {
+        if (currentStatus != SessionStatus.NO_SESSION) {
+            throw new ChatServiceException(
+                    "Aufruf nicht m+glich. Falscher Status. Aktueller Status:"
+                            + currentStatus.toString());
+        }
+        
+        this.username = name;
+        LWTRTServiceMock lwtrtServImp = new LWTRTServiceMock();
+        try{
+            setConnection(lwtrtServImp.connect(rcvAdd, port));
+            
+        }catch(LWTRTException e){
+            e.printStackTrace();
+        }
+        ChatPdu cpdu = new ChatPdu();
+        cpdu.setOpId(ChatPdu.ChatOpId.createSession_req_PDU);
+        cpdu.setName(name);
+        try{
+            connection.send(cpdu);
+        }catch(LWTRTException e){
+            e.printStackTrace();
+        }
 
-	}
+    }
 
 	/**
 	 * @param message
