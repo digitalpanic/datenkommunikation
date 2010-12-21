@@ -118,6 +118,56 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 	}
 
 	/**
+	 * Anfrage zur Lebendüberwachung
+	 * 
+	 * @throws LWTRTException
+	 * @author Florian Leicher & Matthias Kühn
+	 */
+	public void ping() throws LWTRTException {
+
+		timer.start("ping");
+		LWTRTPdu pdu = new LWTRTPdu();
+		pdu.setRemoteAddress(remAdr);
+		pdu.setOpId(LWTRTPdu.OPID_PING_REQ);
+		pdu.setRemotePort(remPort);
+		pdu.setSequenceNumber(seqNr);
+		setSeqNr();
+		try {
+			udpw.send(pdu);
+		} catch (SocketException ex) {
+			ex.printStackTrace();
+			log.error("Socketerror: " + ex);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			log.error("IO Exceptoion: " + ex);
+		}
+		timer.stop();
+	}
+
+	/**
+	 * Empfang und sortieren der Daten vom Sender.
+	 * 
+	 * @author Florian Leicher & Matthias Kühn
+	 * @throws LWTRTException
+	 */
+	public Object receive() throws LWTRTException {
+
+		while (true) {
+			if (!this.pngBuff.isEmpty()) {
+				LWTRTPdu lwtrtPdu = this.pngBuff.firstElement();
+				this.pngBuff.remove(lwtrtPdu);
+				return lwtrtPdu.getUserData();
+			}
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException iex) {
+				iex.printStackTrace();
+				log.error("Empfangsfehler: " + iex);
+			}
+		}
+	}
+
+	/**
 	 * Sendeversuch mit evtl. Wiederholung
 	 * 
 	 * @author Florian Leicher & Matthias Kühn
@@ -151,56 +201,6 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 			log.error(eie);
 		}
 		setSeqNr();
-		timer.stop();
-	}
-
-	/**
-	 * Empfang und sortieren der Daten vom Sender.
-	 * 
-	 * @author Florian Leicher & Matthias Kühn
-	 * @throws LWTRTException
-	 */
-	public Object receive() throws LWTRTException {
-
-		while (true) {
-			if (!this.pngBuff.isEmpty()) {
-				LWTRTPdu lwtrtPdu = this.pngBuff.firstElement();
-				this.pngBuff.remove(lwtrtPdu);
-				return lwtrtPdu.getUserData();
-			}
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException iex) {
-				iex.printStackTrace();
-				log.error("Empfangsfehler: " + iex);
-			}
-		}
-	}
-
-	/**
-	 * Anfrage zur Lebendüberwachung
-	 * 
-	 * @throws LWTRTException
-	 * @author Florian Leicher & Matthias Kühn
-	 */
-	public void ping() throws LWTRTException {
-
-		timer.start("ping");
-		LWTRTPdu pdu = new LWTRTPdu();
-		pdu.setRemoteAddress(remAdr);
-		pdu.setOpId(LWTRTPdu.OPID_PING_REQ);
-		pdu.setRemotePort(remPort);
-		pdu.setSequenceNumber(seqNr);
-		setSeqNr();
-		try {
-			udpw.send(pdu);
-		} catch (SocketException ex) {
-			ex.printStackTrace();
-			log.error("Socketerror: " + ex);
-		} catch (IOException ex) {
-			ex.printStackTrace();
-			log.error("IO Exceptoion: " + ex);
-		}
 		timer.stop();
 	}
 
@@ -255,6 +255,7 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 		private RecThread(LWTRTConnectionImpl connection) {
 			this.con = connection;
 		}
+
 		@SuppressWarnings("deprecation")
 		public void run() {
 			log.info("Thread wurde gestartet");
