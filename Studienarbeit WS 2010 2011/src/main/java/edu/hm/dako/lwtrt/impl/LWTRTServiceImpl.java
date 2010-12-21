@@ -54,7 +54,7 @@ public class LWTRTServiceImpl implements LWTRTService {
 	 * Annahme einer eingehenden Verbindung
 	 * 
 	 * @throws LWTRTException
-	 * @author Florian Leicher
+	 * @author Florian Leicher & Matthias Kühn
 	 */
 	public LWTRTConnection accept() throws LWTRTException {
 		LWTRTPdu receivePDU = new LWTRTPdu();
@@ -114,54 +114,6 @@ public class LWTRTServiceImpl implements LWTRTService {
 	}
 
 	/**
-	 * De-Regestriert den Port, entfernt diesen aus das Hashmap und schliesst
-	 * den Wrapper.
-	 * 
-	 * 
-	 * @param port
-	 *            Port, welcher De-Regestriert und aus der Hashmap entfernt
-	 *            werden soll.
-	 * @throws LWTRTException
-	 * @author Florian Leicher
-	 */
-	public void unregister() throws LWTRTException {
-		UdpSocketWrapper udpswu;
-		try {
-			udpswu = LWTRTServiceImpl.socketmap.get((Integer) port);
-			log.debug("Port " + port + " wurde aus Socketmap geholt");
-			socketmap.remove((Integer) port);
-			log.debug("Port " + port + " wurde aus Socketmap entfernt.");
-			udpswu.close();
-			log.debug("SocketWrapper wurde geschlossen.");
-		} catch (Exception ex) {
-			log.error("Fehler bei De-Regestrierung der Ports: " + port + " "
-					+ ex);
-			ex.printStackTrace();
-		}
-
-	}
-
-	/**
-	 * Registrieren einer Anwendung und Port aktivieren
-	 * 
-	 * @param localPort
-	 *            Portnumber
-	 * @throws LWTRTException
-	 * @author Florian Leicher
-	 */
-	public void register(int port) throws LWTRTException {
-		try {
-			UdpSocketWrapper udpsw = new UdpSocketWrapper(port);
-			socketmap.put(port, udpsw);
-			log.debug("Register LWTRTPort. Portnumber:"
-					+ LWTRTServiceImpl.socketmap.get(port));
-		} catch (Exception ex) {
-			log.error("Fehler bei Regestrierung der Ports:" + ex);
-			ex.printStackTrace();
-		}
-	}
-
-	/**
 	 * Stellt eine Verbidung her, welche die Verbindungssicherheit für die
 	 * UDP-Verbindung gewährleistet.
 	 * 
@@ -171,7 +123,7 @@ public class LWTRTServiceImpl implements LWTRTService {
 	 * @param remotePort
 	 *            port des Remoterechners
 	 * @throws LWTRTException
-	 * @author Florian Leicher
+	 * @author Florian Leicher & Matthias Kühn
 	 */
 	public LWTRTConnection connect(String remoteAddress, int remotePort)
 			throws LWTRTException {
@@ -242,20 +194,64 @@ public class LWTRTServiceImpl implements LWTRTService {
 	}
 
 	/**
+	 * Registrieren einer Anwendung und Port aktivieren
+	 * 
+	 * @param localPort
+	 *            Portnumber
+	 * @throws LWTRTException
+	 * @author Florian Leicher & Matthias Kühn
+	 */
+	public void register(int port) throws LWTRTException {
+		try {
+			UdpSocketWrapper udpsw = new UdpSocketWrapper(port);
+			socketmap.put(port, udpsw);
+			log.debug("Register LWTRTPort. Portnumber:"
+					+ LWTRTServiceImpl.socketmap.get(port));
+		} catch (Exception ex) {
+			log.error("Fehler bei Regestrierung der Ports:" + ex);
+			ex.printStackTrace();
+		}
+	}
+	
+	/**
+	 * De-Regestriert den Port, entfernt diesen aus das Hashmap und schliesst
+	 * den Wrapper.
+	 * 
+	 * 
+	 * @param port
+	 *            Port, welcher De-Regestriert und aus der Hashmap entfernt
+	 *            werden soll.
+	 * @throws LWTRTException
+	 * @author Florian Leicher & Matthias Kühn
+	 */
+	public void unregister() throws LWTRTException {
+		UdpSocketWrapper udpswu;
+		try {
+			udpswu = LWTRTServiceImpl.socketmap.get((Integer) port);
+			log.debug("Port " + port + " wurde aus Socketmap geholt");
+			socketmap.remove((Integer) port);
+			log.debug("Port " + port + " wurde aus Socketmap entfernt.");
+			udpswu.close();
+			log.debug("SocketWrapper wurde geschlossen.");
+		} catch (Exception ex) {
+			log.error("Fehler bei De-Regestrierung der Ports: " + port + " "
+					+ ex);
+			ex.printStackTrace();
+		}
+	}
+
+	/**
 	 * Neue innerclass für das sharing
 	 * 
-	 * @author Florian Leicher
+	 * @author Florian Leicher & Matthias Kühn
 	 */
 	public class shareThread extends Thread {
 
 		LWTRTPdu toShare;
 		LWTRTConnectionImpl sharing;
-
 		public shareThread() {
 		}
-
 		public void run() {
-
 			log.debug("sThread started");
 			while (true) {
 				if (!LWTRTServiceImpl.buffer.isEmpty()) {
@@ -267,7 +263,6 @@ public class LWTRTServiceImpl implements LWTRTService {
 					}
 					LWTRTServiceImpl.buffer.remove(toShare);
 				}
-
 				{
 					try {
 						Thread.sleep(50);
@@ -276,34 +271,29 @@ public class LWTRTServiceImpl implements LWTRTService {
 						ex.printStackTrace();
 					}
 				}
-
 			}
-
 		}
 	}
 
 	/**
 	 * Neue innerclass welche einen UDPSocket launscht und in den Buffer legt.
 	 * 
-	 * @author Florian Leicher
-	 * 
+	 * @author Florian Leicher & Matthias Kühn
 	 */
 	public class recThread extends Thread {
 		UdpSocketWrapper udpsocket;
 		LWTRTConnectionImpl connection;
-
+		
 		public recThread(UdpSocketWrapper udpsocket, LWTRTConnectionImpl con) {
 			this.udpsocket = udpsocket;
 			this.connection = con;
 			log.debug("Receivertread gestartet " + udpsocket.getLocalPort());
 		}
-
 		@SuppressWarnings("deprecation")
 		@Override
 		public void run() {
 			while (true) {
 				LWTRTPdu receivePDU = new LWTRTPdu();
-
 				try {
 					udpsocket.receive(receivePDU);
 				} catch (IOException ex) {
@@ -314,10 +304,7 @@ public class LWTRTServiceImpl implements LWTRTService {
 				{
 					this.connection.pngBuff.add(receivePDU);
 				}
-
 			}
 		}
-
 	}
-
 }
