@@ -18,7 +18,7 @@ import edu.hm.dako.lwtrt.ex.LWTRTException;
 /**
  * The Class ServerSessionImpl.
  * 
- * @author Hochschule MÃ¼nchen
+ * @author Hochschule München
  * @version 1.0.0
  */
 public class ChatServerServiceImpl extends BaseServiceImpl implements
@@ -35,7 +35,7 @@ public class ChatServerServiceImpl extends BaseServiceImpl implements
 	/**
 	 * @param message
 	 * @throws ChatServiceException
-	 * @autor Pavlo Bishko
+	 * @autor Pavlo Bishko & Maria Hoang
 	 */
 	@Override
 	public void sendMessage(ChatMessage message) throws ChatServiceException {
@@ -70,7 +70,7 @@ public class ChatServerServiceImpl extends BaseServiceImpl implements
 	/**
 	 * @param action
 	 * @throws ChatServiceException
-	 * @autor Pavlo Bishko
+	 * @autor Pavlo Bishko & Maria Hoang
 	 */
 	@Override
 	public void sendAction(ChatAction action) throws ChatServiceException {
@@ -102,7 +102,7 @@ public class ChatServerServiceImpl extends BaseServiceImpl implements
 	/**
 	 * @param userList
 	 * @throws ChatServiceException
-	 * @autor Pavlo Bishko
+	 * @autor Pavlo Bishko & Maria Hoang
 	 */
 	@Override
 	public void sendUserList(ChatUserList userlist) throws ChatServiceException {
@@ -146,7 +146,7 @@ public class ChatServerServiceImpl extends BaseServiceImpl implements
 
 	/**
 	 * @throws ChatServiceException
-	 * @autor Pavlo Bishko
+	 * @autor Maria Hoang & Pavlo Bishko
 	 */
 	@Override
 	public void destroy() throws ChatServiceException {
@@ -159,17 +159,21 @@ public class ChatServerServiceImpl extends BaseServiceImpl implements
 			e.printStackTrace();
 		}
 
-		try {
-			connection.disconnect();
-		}
-
-		catch (Exception ex) {
-			ex.printStackTrace();
-		}
+//		FL: Ich hab mir mal erlaubt dieses zweite diconnect auszukommentieren...
+//		try {
+//			connection.disconnect();
+//		}
+//
+//		catch (Exception ex) {
+//			ex.printStackTrace();
+//		}
 
 	}
 
 	@Override
+	/**
+	 *  @author Maria Hoang
+	 */
 	public String getUserName() {
 		return super.getUsername();
 	}

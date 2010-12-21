@@ -37,7 +37,7 @@ public class ChatClientServiceImpl extends BaseServiceImpl implements
         LWTRTServiceMock lwtrtServImp = new LWTRTServiceMock();
         try{
             setConnection(lwtrtServImp.connect(rcvAdd, port));
-            
+
         }catch(LWTRTException e){
             e.printStackTrace();
         }

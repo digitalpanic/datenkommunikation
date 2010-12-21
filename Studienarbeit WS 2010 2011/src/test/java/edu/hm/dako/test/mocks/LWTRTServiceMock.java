@@ -42,7 +42,6 @@ public class LWTRTServiceMock implements LWTRTService {
 		} catch (IOException e) {
 			throw new LWTRTException(e);
 		}
-
 	}
 
 	public LWTRTConnection accept() throws LWTRTException {

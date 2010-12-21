@@ -20,7 +20,7 @@ public class ChatClientServiceFactoryImpl implements ChatClientServiceFactory {
 	/**
 	 * @param port
 	 * @return ChatClientServiceImpl
-	 * @autor Pavlo Bishko
+	 * @autor Pavlo Bishko & Maria Hoang
 	 */
 	@Override
 	public ChatClientService register(int port) throws ChatServiceException {
@@ -31,5 +31,4 @@ public class ChatClientServiceFactoryImpl implements ChatClientServiceFactory {
 		}
 		return new ChatClientServiceImpl();
 	}
-
 }

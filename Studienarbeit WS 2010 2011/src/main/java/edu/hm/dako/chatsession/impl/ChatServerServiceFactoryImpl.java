@@ -31,7 +31,7 @@ public class ChatServerServiceFactoryImpl implements ChatServerServiceFactory {
 	 * @param con
 	 * @return csService
 	 * @throws ChatServiceException
-	 * @autor Pavlo Bishko
+	 * @autor Pavlo Bishko & Maria Hoang
 	 */
 	private ChatServerServiceImpl createChatServerService(LWTRTConnection con) throws ChatServiceException {
 	        // TODO
@@ -46,7 +46,7 @@ public class ChatServerServiceFactoryImpl implements ChatServerServiceFactory {
 	/**
 	 * @param port
 	 * @throws ChatServiceException
-	 * @autor Pavlo Bishko
+	 * @autor Pavlo Bishko & Maria Hoang
 	 */
 	    public void register(int port) throws ChatServiceException {
 	    // TODO
@@ -65,7 +65,7 @@ public class ChatServerServiceFactoryImpl implements ChatServerServiceFactory {
 	    /**
 		 * @return connect
 		 * @throws ChatServiceException
-		 * @autor Pavlo Bishko
+		 * @autor Pavlo Bishko & Maria Hoang
 		 */
 	    public ChatServerService getSession() throws ChatServiceException {
 	        // TODO
