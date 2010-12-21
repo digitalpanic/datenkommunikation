@@ -8,5 +8,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/junit-4.8.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="src" path="/LWTRT-CHAT"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
