@@ -8,17 +8,17 @@ import org.apache.commons.logging.LogFactory;
  * Codestück (task) auszüführen zu tracken.
  * 
  * 
- * @author Florian Leicher
+ * @author Florian Leicher & Matthias Kühn
  * @version 1.0.0
  * 
  */
-public class Timer {
+public class LWTRTTimerImpl {
 	// Aktuelle Systemzeit in nanosekunden
 	private long time = 0;
 	// Task, auf welchen der Timer angesetzt wird
 	private String task;
 	// Loggingvariable
-	private static Log log = LogFactory.getLog(Timer.class);
+	private static Log log = LogFactory.getLog(LWTRTTimerImpl.class);
 
 	/**
 	 * Diese Methode startet den Timer und gibt eine entsprechende Meldung in
@@ -27,6 +27,7 @@ public class Timer {
 	 * @param task
 	 *            Gibt den Namen des Tasks an, auf welchen der Timer angewendet
 	 *            wird.
+	 * @author Florian Leicher & Matthias Kühn      
 	 */
 	public void start(String task) {
 		this.task = task;
@@ -37,7 +38,7 @@ public class Timer {
 
 	/**
 	 * Methode zum Stoppen des Timers.
-	 * 
+	 * @author Florian Leicher & Matthias Kühn    
 	 */
 	public void stop() {
 		time = System.nanoTime() - time;
@@ -49,6 +50,7 @@ public class Timer {
 	 * Getter
 	 * 
 	 * @return Aktueller Timerstand
+	 * @author Florian Leicher & Matthias Kühn    
 	 */
 	public long getTime() {
 		return time;

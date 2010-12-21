@@ -17,7 +17,7 @@ import edu.hm.dako.udp.wrapper.UdpSocketWrapper;
 /**
  * The Class ConnectionImpl.
  * 
- * @author Florian Leicher
+ * @author Florian Leicher & Matthias Kühn
  * @version 1.0.0
  */
 public class LWTRTConnectionImpl implements LWTRTConnection {
@@ -40,7 +40,7 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 	volatile Vector<LWTRTPdu> pngBuff = new Vector<LWTRTPdu>();
 	private volatile Vector<LWTRTPdu> pickUpBuff = new Vector<LWTRTPdu>();
 
-	private Timer timer;
+	private LWTRTTimerImpl timer;
 	private RecThread rThread;
 
 	public LWTRTConnectionImpl(String adress2, int port2, String remAdress2,
@@ -61,7 +61,7 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 	/**
 	 * Akzeptieren des Verbindungsabbau.
 	 * 
-	 * @author Florian Leicher
+	 * @author Florian Leicher & Matthias Kühn
 	 */
 	public void acceptDisconnection() throws LWTRTException {
 
@@ -84,19 +84,16 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 	/**
 	 * Abbau der Verbindung
 	 * 
-	 * @author Florian Leicher
+	 * @author Florian Leicher & Matthias Kühn
 	 * @throws LWTRTException
 	 * 
 	 */
 	public void disconnect() throws LWTRTException {
-
 		timer.start("disconnect");
-
 		LWTRTPdu pdu = new LWTRTPdu();
 		pdu.setRemoteAddress(remAdr);
 		pdu.setRemotePort(remPort);
 		pdu.setOpId(LWTRTPdu.OPID_DISCONNECT_REQ);
-
 		try {
 			for (int i = 0; i < 3; i++) {
 				udpw.send(pdu);
@@ -116,16 +113,14 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 			log.error("Disconnect Thread wurde unterborchen. " + ex);
 			ex.printStackTrace();
 		}
-
 		setSeqNr();
 		timer.stop();
-
 	}
 
 	/**
 	 * Sendeversuch mit evtl. Wiederholung
 	 * 
-	 * @author Florian Leicher
+	 * @author Florian Leicher & Matthias Kühn
 	 */
 	public void send(Object pdu) throws LWTRTException {
 		timer.start("send");
@@ -136,7 +131,6 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 		pdu1.setOpId(LWTRTPdu.OPID_DATA_REQ);
 		pdu1.setUserData(userData);
 		pdu1.setSequenceNumber(seqNr);
-
 		try {
 			for (int i = 0; i < 3; i++) {
 				udpw.send(pdu1);
@@ -149,7 +143,6 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 					Thread.sleep(1000);
 				}
 			}
-
 		} catch (IOException eio) {
 			eio.printStackTrace();
 			log.error(eio);
@@ -157,22 +150,19 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 			eie.printStackTrace();
 			log.error(eie);
 		}
-
 		setSeqNr();
 		timer.stop();
-
 	}
 
 	/**
 	 * Empfang und sortieren der Daten vom Sender.
 	 * 
-	 * @author Florian Leicher
+	 * @author Florian Leicher & Matthias Kühn
 	 * @throws LWTRTException
 	 */
 	public Object receive() throws LWTRTException {
 
 		while (true) {
-
 			if (!this.pngBuff.isEmpty()) {
 				LWTRTPdu lwtrtPdu = this.pngBuff.firstElement();
 				this.pngBuff.remove(lwtrtPdu);
@@ -191,20 +181,17 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 	 * Anfrage zur Lebendüberwachung
 	 * 
 	 * @throws LWTRTException
-	 * @author Florian Leicher
+	 * @author Florian Leicher & Matthias Kühn
 	 */
 	public void ping() throws LWTRTException {
 
 		timer.start("ping");
-
 		LWTRTPdu pdu = new LWTRTPdu();
 		pdu.setRemoteAddress(remAdr);
 		pdu.setOpId(LWTRTPdu.OPID_PING_REQ);
 		pdu.setRemotePort(remPort);
 		pdu.setSequenceNumber(seqNr);
-
 		setSeqNr();
-
 		try {
 			udpw.send(pdu);
 		} catch (SocketException ex) {
@@ -214,14 +201,13 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 			ex.printStackTrace();
 			log.error("IO Exceptoion: " + ex);
 		}
-
 		timer.stop();
 	}
 
 	/**
 	 * Antwort zur Lebendüberwachung
 	 * 
-	 * @author Florian Leicher
+	 * @author Florian Leicher & Matthias Kühn
 	 * @throws LWTRTException
 	 */
 	public void pingRSP() throws LWTRTException {
@@ -241,13 +227,12 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 			ex.printStackTrace();
 			log.error("IO Exceptoion: " + ex);
 		}
-
 	}
 
 	/**
 	 * Ändert die bestehende Seqennumer von 1 auf 0 bzw. von 0 auf 1.
 	 * 
-	 * @author Florian Leicher
+	 * @author Florian Leicher & Matthias Kühn
 	 */
 	private void setSeqNr() {
 		if (this.seqNr == 1) {
@@ -260,7 +245,7 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 	/**
 	 * Thread für den Empfang.
 	 * 
-	 * @author Florian
+	 * @author Florian Leicher & Matthias Kühn
 	 */
 	private static class RecThread extends Thread {
 
@@ -270,7 +255,6 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 		private RecThread(LWTRTConnectionImpl connection) {
 			this.con = connection;
 		}
-
 		@SuppressWarnings("deprecation")
 		public void run() {
 			log.info("Thread wurde gestartet");
@@ -318,23 +302,18 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 							log.error("Fehler beim Verbindungsaufbau: " + ex2);
 							ex2.printStackTrace();
 						}
-
 						this.stop();
-
 						break;
-
 					// OPID für Antwort Verbindungsabbau
 					case LWTRTPdu.OPID_DISCONNECT_RSP:
 
 						con.pngBuff.remove(pdu);
-
 						try {
 							con.finalize();
 						} catch (Throwable ex) {
 							log.error("Fehler beim Verbindungsabbau: " + ex);
 							ex.printStackTrace();
 						}
-
 						this.stop();
 						break;
 
@@ -346,7 +325,6 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 						respondeData.setRemoteAddress(con.remAdr);
 						respondeData.setRemotePort(con.remPort);
 						respondeData.setOpId(LWTRTPdu.OPID_DATA_RSP);
-
 						try {
 							con.udpw.send(respondeData);
 						} catch (IOException ex) {
@@ -356,7 +334,6 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 						}
 						con.pickUpBuff.add(pdu);
 						con.pngBuff.remove(pdu);
-
 						break;
 
 					// OPID für Antwort DatenSenden
@@ -365,7 +342,6 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 						if (pdu.getSequenceNumber() == con.seqNr) {
 							con.sendSuc = true;
 						}
-
 						log.info("Versand Erfolgreich");
 						con.pngBuff.remove(pdu);
 						break;
@@ -378,16 +354,13 @@ public class LWTRTConnectionImpl implements LWTRTConnection {
 							log.error("Fehler beim Versenden des Ping: " + ex);
 							ex.printStackTrace();
 						}
-
 						// OPID für Antwort Ping
 					case LWTRTPdu.OPID_PING_RSP:
 						con.pngBuff.add(pdu);
 						con.pngBuff.remove(pdu);
 						break;
 					}
-
 				}
-
 			}
 		}
 	}
