@@ -48,10 +48,20 @@ public abstract class BaseServiceImpl implements BaseSessionService {
 
 	}
 
+	/**
+	 * 
+	 * @param listenport
+	 * @author Maria Hoang
+	 */
 	public void setListenport(int listenport) {
 		this.listeport = listenport;
 	}
 
+	/**
+	 * 
+	 * @return
+	 * @author Maria Hoang
+	 */
 	public String getUsername() {
 		return username;
 	}
