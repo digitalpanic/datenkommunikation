@@ -10,12 +10,13 @@ import edu.hm.dako.chatsession.pdu.ChatAction;
 import edu.hm.dako.chatsession.pdu.ChatMessage;
 import edu.hm.dako.chatsession.pdu.ChatPdu;
 import edu.hm.dako.lwtrt.ex.LWTRTException;
+import edu.hm.dako.lwtrt.impl.LWTRTServiceImpl;
 import edu.hm.dako.test.mocks.LWTRTServiceMock;
 
 /**
  * The Class ClientSessionImpl.
  * 
- * @author Hochschule MÃ¼nchen
+ * @author Hochschule München
  * @version 1.0.0
  */
 
@@ -24,38 +25,45 @@ public class ChatClientServiceImpl extends BaseServiceImpl implements
 	private static Log log = LogFactory.getLog(ChatClientServiceImpl.class);
 	protected ChatClientListener listener;
 
+	
+	/**
+	 * @param rcvAdd, port, name
+	 * @throws ChatServiceException
+	 */
 	@Override
-    public void create(String rcvAdd, int port, String name)
-            throws ChatServiceException {
-        if (currentStatus != SessionStatus.NO_SESSION) {
-            throw new ChatServiceException(
-                    "Aufruf nicht m+glich. Falscher Status. Aktueller Status:"
-                            + currentStatus.toString());
-        }
-        
-        this.username = name;
-        LWTRTServiceMock lwtrtServImp = new LWTRTServiceMock();
-        try{
-            setConnection(lwtrtServImp.connect(rcvAdd, port));
+	public void create(String rcvAdd, int port, String name)
+			throws ChatServiceException {
+		this.username = name;
+		LWTRTServiceMock lwtrtServImp = new LWTRTServiceMock();
+		ChatPdu cpdu = new ChatPdu();
+		cpdu.setOpId(ChatPdu.ChatOpId.createSession_req_PDU);
+		cpdu.setName(name);
 
-        }catch(LWTRTException e){
-            e.printStackTrace();
-        }
-        ChatPdu cpdu = new ChatPdu();
-        cpdu.setOpId(ChatPdu.ChatOpId.createSession_req_PDU);
-        cpdu.setName(name);
-        try{
-            connection.send(cpdu);
-        }catch(LWTRTException e){
-            e.printStackTrace();
-        }
+		if (currentStatus != SessionStatus.NO_SESSION) {
+			throw new ChatServiceException(
+					"Aufruf nicht m+glich. Falscher Status. Aktueller Status:"
+							+ currentStatus.toString());
 
-    }
+		}
+
+		try {
+			setConnection(lwtrtServImp.connect(rcvAdd, port));
+
+		} catch (LWTRTException e) {
+			e.printStackTrace();
+		}
+
+		 try{
+		 connection.send(cpdu);
+		 }catch(LWTRTException e){
+		 e.printStackTrace();
+		 }
+
+	}
 
 	/**
 	 * @param message
 	 * @throws ChatServiceException
-	 * @autor Pavlo Bishko
 	 */
 	@Override
 	public void sendMessage(ChatMessage message) throws ChatServiceException {
@@ -64,6 +72,7 @@ public class ChatClientServiceImpl extends BaseServiceImpl implements
 		cpdu.setName(message.getUsername());
 		cpdu.setData(message);
 		try {
+			log.debug("sending the message, problem error!");
 			connection.send(cpdu);
 		} catch (LWTRTException e) {
 			e.printStackTrace();
@@ -74,7 +83,6 @@ public class ChatClientServiceImpl extends BaseServiceImpl implements
 	/**
 	 * @param action
 	 * @throws ChatServiceException
-	 * @autor Pavlo Bishko
 	 */
 	@Override
 	public void sendAction(ChatAction action) throws ChatServiceException {
@@ -84,27 +92,28 @@ public class ChatClientServiceImpl extends BaseServiceImpl implements
 	/**
 	 * @param listener
 	 * @throws ChatServiceException
-	 * @autor Pavlo Bishko
 	 */
 	@Override
 	public void registerChatSessionListener(ChatClientListener listener) {
 		this.listener = listener;
+		
+		// threads should be implemented!
 
 	}
 
 	/**
 	 * @throws ChatServiceException
-	 * @autor Pavlo Bishko
 	 */
 	@Override
 	public void destroy() throws ChatServiceException {
 		ChatPdu cpdu = new ChatPdu();
 		cpdu.setName(this.username);
 		cpdu.setOpId(ChatPdu.ChatOpId.destroySession_req_PDU);
+		log.debug("sending logout");
 		try {
 			connection.send(cpdu);
-			log.debug("logout ist unterwegs");
 			connection.disconnect();
+			this.finalize();
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}

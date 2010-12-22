@@ -14,7 +14,7 @@ import edu.hm.dako.test.mocks.LWTRTServiceMock;
 /**
  * The Enum ServerSessionFactoryImpl.
  * 
- * @author Hochschule MÃ¼nchen
+ * @author Hochschule München
  * @version 1.0.0
  */
 
@@ -22,69 +22,62 @@ public class ChatServerServiceFactoryImpl implements ChatServerServiceFactory {
 
 	private static Log log = LogFactory
 			.getLog(ChatServerServiceFactoryImpl.class);
-	
-	 public int port;
-	 private LWTRTServiceMock sMock = new LWTRTServiceMock();
-	 //private LWTRTServiceImpl sMock = new LWTRTServiceImpl();
-	 
-	 /**
+
+	public int port;
+	private LWTRTServiceMock sMock = new LWTRTServiceMock();
+
+	// private LWTRTServiceImpl sMock = new LWTRTServiceImpl();
+
+	/**
 	 * @param con
 	 * @return csService
 	 * @throws ChatServiceException
 	 * @autor Pavlo Bishko & Maria Hoang
 	 */
-	private ChatServerServiceImpl createChatServerService(LWTRTConnection con) throws ChatServiceException {
-	        // TODO
+	private ChatServerServiceImpl createChatServerService(LWTRTConnection con)
+			throws ChatServiceException {
+		// TODO
 		ChatServerServiceImpl csService = new ChatServerServiceImpl(con, port);
-		//csService.set????
+		csService.setConnection(con);
 		return csService;
-	    	
-	    }
-	
 
+	}
 
 	/**
 	 * @param port
 	 * @throws ChatServiceException
 	 * @autor Pavlo Bishko & Maria Hoang
 	 */
-	    public void register(int port) throws ChatServiceException {
-	    // TODO
-	    	try
-	    	{
-	    		sMock.register(port);
-	    	}
-	    	
-	    	catch (Exception e)
-	    	{
-	    		throw new ChatServiceException(e);
-	    	} 	
-	    }
+	public void register(int port) throws ChatServiceException {
+		// TODO
+		try {
+			sMock.register(port);
+		}
 
-	    
-	    /**
-		 * @return connect
-		 * @throws ChatServiceException
-		 * @autor Pavlo Bishko & Maria Hoang
-		 */
-	    public ChatServerService getSession() throws ChatServiceException {
-	        // TODO
-	    	LWTRTConnection connect;
-	    	//LWTRTConnectionImpl connect;
-	    	try
-			{
-		    		connect = sMock.accept();
-			}
-			
-			catch (Exception e)
-			{
-				throw new ChatServiceException("server couldn't accept the request!", e);
-			}
-			
-	        return createChatServerService(connect);
-	    }
-	
-	    
-
-	
+		catch (Exception e) {
+			throw new ChatServiceException(e);
+		}
 	}
+
+	/**
+	 * @return connect
+	 * @throws ChatServiceException
+	 * @autor Pavlo Bishko & Maria Hoang
+	 */
+	public ChatServerService getSession() throws ChatServiceException {
+		// TODO
+		LWTRTConnection connect;
+		// LWTRTConnectionImpl connect;
+		try {
+			connect = sMock.accept();
+		}
+
+		catch (Exception e) {
+			throw new ChatServiceException(
+					"server couldn't accept the request!", e);
+		}
+
+		return createChatServerService(connect);
+	}
+
+}

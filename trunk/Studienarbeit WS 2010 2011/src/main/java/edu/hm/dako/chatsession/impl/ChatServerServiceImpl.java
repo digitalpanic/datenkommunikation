@@ -49,20 +49,8 @@ public class ChatServerServiceImpl extends BaseServiceImpl implements
 		}
 
 		catch (LWTRTException e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 			log.error("send error!" + e.getMessage());
-		}
-
-		ChatPdu pdu = new ChatPdu();
-		pdu.setName(message.getUsername());
-		pdu.setOpId(ChatOpId.sendMessage_req_PDU);
-		pdu.setData(message);
-		try {
-			connection.send(pdu);
-		}
-
-		catch (Exception ex) {
-			ex.printStackTrace();
 		}
 
 	}
@@ -70,7 +58,7 @@ public class ChatServerServiceImpl extends BaseServiceImpl implements
 	/**
 	 * @param action
 	 * @throws ChatServiceException
-	 * @autor Pavlo Bishko & Maria Hoang
+	 * @autor Pavlo Bishko
 	 */
 	@Override
 	public void sendAction(ChatAction action) throws ChatServiceException {
@@ -86,23 +74,12 @@ public class ChatServerServiceImpl extends BaseServiceImpl implements
 			e.printStackTrace();
 		}
 
-		ChatPdu pduAction = new ChatPdu();
-		pduAction.setData(action);
-		pduAction.setOpId(ChatOpId.sendAction_req_PDU);
-		try {
-			connection.send(pduAction);
-		}
-
-		catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
 	}
 
 	/**
 	 * @param userList
 	 * @throws ChatServiceException
-	 * @autor Pavlo Bishko & Maria Hoang
+	 * @autor Pavlo Bishko
 	 */
 	@Override
 	public void sendUserList(ChatUserList userlist) throws ChatServiceException {
@@ -118,17 +95,6 @@ public class ChatServerServiceImpl extends BaseServiceImpl implements
 			e.printStackTrace();
 		}
 
-		ChatPdu pduList = new ChatPdu();
-		pduList.setData(userlist);
-		pduList.setOpId(ChatOpId.sendList_req_PDU);
-		try {
-			connection.send(pduList);
-		}
-
-		catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
 	}
 
 	/**
@@ -140,13 +106,12 @@ public class ChatServerServiceImpl extends BaseServiceImpl implements
 	public void registerChatSessionListener(ChatServerListener listener)
 			throws ChatServiceException {
 		this.listener = listener;
-		// ???
 
 	}
 
 	/**
 	 * @throws ChatServiceException
-	 * @autor Maria Hoang & Pavlo Bishko
+	 * @autor Pavlo Bishko & Maria Hoang
 	 */
 	@Override
 	public void destroy() throws ChatServiceException {
@@ -159,21 +124,9 @@ public class ChatServerServiceImpl extends BaseServiceImpl implements
 			e.printStackTrace();
 		}
 
-//		FL: Ich hab mir mal erlaubt dieses zweite diconnect auszukommentieren...
-//		try {
-//			connection.disconnect();
-//		}
-//
-//		catch (Exception ex) {
-//			ex.printStackTrace();
-//		}
-
 	}
 
 	@Override
-	/**
-	 *  @author Maria Hoang
-	 */
 	public String getUserName() {
 		return super.getUsername();
 	}
