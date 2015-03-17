@@ -1,0 +1,1 @@
+Dis ist das SVN für die Studienarbeit in dem Fach Datenkommunikation bei Prof. Mandl im Winstersemester 2010 / 2011 bei Prof. Mandl an der HM München der Gruppe 'Die-Drei-Nachholer'
